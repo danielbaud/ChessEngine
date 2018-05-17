@@ -1,2 +1,4 @@
 uml
 *.o
+*.swp
+*.swo
