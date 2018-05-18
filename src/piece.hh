@@ -1,3 +1,5 @@
+#pragma once
+
 #include "plugin/color.hh"
 #include "plugin/piece-type.hh"
 #include "plugin/position.hh"

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "plugin/listener.hh"
 #include "plugin/chessboard-interface.hh"
 

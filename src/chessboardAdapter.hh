@@ -1,3 +1,5 @@
+#pragma once
+
 #include "plugin/chessboard-interface.hh"
 
 class ChessboardAdapter : public plugin::ChessboardInterface
