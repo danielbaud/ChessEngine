@@ -2,3 +2,4 @@ uml
 *.o
 *.swp
 *.swo
+clean

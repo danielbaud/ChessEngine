@@ -13,7 +13,7 @@ class Engine
 
 public:
 
-  Engine();
+  Engine(unsigned short port);
 
   bool move(Position p1, Position p2);
   bool parse(std::string path);
