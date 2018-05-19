@@ -9,3 +9,25 @@ ChessBoard::ChessBoard()
   rookw = true;
   rookb = true;
 }
+
+
+State ChessBoard::get_state() const { return state; }
+
+std::optional<Piece> ChessBoard::get_piece(const Position& position)
+{
+  for (auto p : pieces)
+  {
+    if (p.get_position() == position)
+      return p;
+  }
+  return std::nullopt;
+}
+
+std::optional<std::vector<Position>> ChessBoard::get_possible_move(const Position& position) const
+{
+  Piece p = get_piece(position);
+  if (!p)
+    return std::nullopt;
+  std::vector<Position> positions = std::vector<Position>();
+  return positions;
+}

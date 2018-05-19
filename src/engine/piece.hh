@@ -16,10 +16,9 @@ public:
 
   Piece(Position p, PieceType t, Color c);
 
-  Position get_position() const {return pos;}
-  PieceType get_type() const {return type;}
-  Color get_color() const {return col;}
-  std::vector<Position> get_possible_move() const;
+  Position get_position() const { return pos; }
+  PieceType get_type() const { return type; }
+  Color get_color() const { return col; }
   bool move_to(Position pos);
 
 private:
