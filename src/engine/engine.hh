@@ -3,8 +3,8 @@
 #include "chessboard.hh"
 #include "chessboardAdapter.hh"
 #include "listenerAdapter.hh"
-#include "network-api/server-network-api.hh"
-#include "network-api/common.hh"
+#include "../network-api/server-network-api.hh"
+#include "../network-api/common.hh"
 #include <string>
 
 

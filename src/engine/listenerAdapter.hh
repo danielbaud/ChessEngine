@@ -1,7 +1,7 @@
 #pragma once
 
-#include "plugin/listener.hh"
-#include "plugin/chessboard-interface.hh"
+#include "../plugin/listener.hh"
+#include "../plugin/chessboard-interface.hh"
 
 using ChessboardInterface = plugin::ChessboardInterface;
 
