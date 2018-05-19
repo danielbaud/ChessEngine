@@ -23,6 +23,5 @@ private:
 
   ChessBoard chessboard;
   ChessboardAdapter cbadapter;
-  ListenerAdapter ladapter;
   network_api::ServerNetworkAPI net;
 };
