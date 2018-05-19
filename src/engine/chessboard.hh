@@ -22,6 +22,7 @@ public:
 
   bool move(Position p1, Position p2);
   State get_state() const;
+  std::vector<Position> get_possible_move() const;
 
 private:
 
