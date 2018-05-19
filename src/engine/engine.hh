@@ -11,15 +11,18 @@ class Engine
 
 public:
 
-  Engine(unsigned short port, std::string pgn);
+  Engine(unsigned short port);
+  Engine(std::string pgn);
 
   bool move(Position p1, Position p2);
-  bool parse(std::string path);
+  bool parse();
   bool start_game();
 
 private:
 
   std::string pgn_path;
   ChessBoard chessboard;
-  network_api::ServerNetworkAPI net;
+  network_api::ServerNetworkAPI* net;
 };
+
+#include "engine.hxx"
