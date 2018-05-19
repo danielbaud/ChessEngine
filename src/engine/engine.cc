@@ -20,14 +20,32 @@ int main(int argc, char **argv)
     std::cerr << "\t-l [ --listeners ] args\tlist of the paths of the listeners plugins" << std::endl;
     return 0;
   }
-  if (opt.get_port() == -1 && opt.get_pgn() == "")
+  if (!opt.get_port() && opt.get_pgn() == "")
   {
     std::cerr << "No PGN file nor port given" << std::endl;
     return 0;
   }
+
+  if (opt.get_port() && opt.get_pgn() != "")
+  {
+    std::cerr << "Both PGN file and port given" << std::endl;
+    return 1;
+  }
+
+  // LOAD LISTENERS FIXME
+
   /* ----------------- */
 
   /* ENGINE */
-  ChessBoard c = ChessBoard();
+  if (opt.get_port())
+  {
+    // SERVER ENGINE
+    Engine engine(opt.get_port());
+    engine.start_game();
+    return 0;
+  }
+  //PGN ENGINE
+  Engine engine(opt.get_pgn());
+  engine.parse();
   return 0;
 }
