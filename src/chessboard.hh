@@ -25,7 +25,9 @@ private:
 
   std::vector<Piece> pieces;
   State state;
-  bool turn;
+  Color turn;
   bool rookw;
   bool rookb;
 };
+
+#include "chessboard.hxx"
