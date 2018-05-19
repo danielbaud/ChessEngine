@@ -1,8 +1,6 @@
 #pragma once
 
 #include "chessboard.hh"
-#include "chessboardAdapter.hh"
-#include "listenerAdapter.hh"
 #include "../network-api/server-network-api.hh"
 #include "../network-api/common.hh"
 #include <string>
@@ -22,6 +20,5 @@ public:
 private:
 
   ChessBoard chessboard;
-  ChessboardAdapter cbadapter;
   network_api::ServerNetworkAPI net;
 };
