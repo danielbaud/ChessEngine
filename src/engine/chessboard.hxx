@@ -2,10 +2,10 @@
 
 ChessBoard::ChessBoard()
 {
-  pieces = new std::vector<Piece>();
-  pieces.add(Piece(Position(A, ONE), ROOK, WHITE))
-  state = RUNNING;
-  turn = WHITE;
+  pieces = std::vector<Piece>();
+  pieces.push_back(Piece(Position(plugin::File::A, plugin::Rank::ONE), plugin::PieceType::ROOK, Color::WHITE));
+  state = State::RUNNING;
+  turn = Color::WHITE;
   rookw = true;
   rookb = true;
 }

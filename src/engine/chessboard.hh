@@ -1,6 +1,9 @@
 #pragma once
 
 #include "piece.hh"
+#include "../plugin/position.hh"
+#include "../plugin/piece-type.hh"
+#include "../plugin/color.hh"
 
 enum class State
 {
