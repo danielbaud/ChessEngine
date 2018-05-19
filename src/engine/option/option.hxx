@@ -2,7 +2,7 @@
 
 Option::Option()
 : help(false)
-, port(-1)
+, port(0)
 , pgn_path("")
 {
   listeners = std::vector<std::string>();
