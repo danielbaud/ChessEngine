@@ -19,7 +19,7 @@ public:
 
 private:
 
-  std::string pgn_path
+  std::string pgn_path;
   ChessBoard chessboard;
   network_api::ServerNetworkAPI net;
 };
