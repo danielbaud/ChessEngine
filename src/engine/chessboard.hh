@@ -1,22 +1,21 @@
 #pragma once
 
-#include "piece.hh"
-#include "../plugin/position.hh"
-#include "../plugin/piece-type.hh"
-#include "../plugin/color.hh"
+#include "pieces/piece.hh"
+#include "pieces/queen.hh"
+#include "pieces/king.hh"
+#include "pieces/bishop.hh"
+#include "pieces/knight.hh"
+#include "pieces/rook.hh"
+#include "pieces/pawn.hh"
 
-enum class State
+
+enum State
 {
-  CHECK,
-  CHECKMATE,
-  DRAW,
-  TIMEOUT,
-  RUNNING
+  CHECK, CHECKMATE, DRAW, TIMEOUT, RUNNING
 };
 
 class ChessBoard
 {
-
 public:
 
   ChessBoard();
@@ -26,7 +25,7 @@ public:
 
 private:
 
-  std::vector<Piece> pieces;
+  std::vector<Piece*> pieces;
   State state;
   Color turn;
   bool rookw;

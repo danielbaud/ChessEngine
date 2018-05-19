@@ -1,5 +1,5 @@
 #include "engine.hh"
-#include "option.hh"
+#include "option/option.hh"
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -28,5 +28,6 @@ int main(int argc, char **argv)
   /* ----------------- */
 
   /* ENGINE */
+  ChessBoard c = ChessBoard();
   return 0;
 }
