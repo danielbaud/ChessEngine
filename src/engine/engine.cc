@@ -41,11 +41,16 @@ int main(int argc, char **argv)
   {
     // SERVER ENGINE
     Engine engine(opt.get_port());
-    engine.start_game();
+    if (!engine.start_game())
+    {
+      std::cerr << "Client got bad move OR bad protocol" << std::endl;
+      return 1;
+    }
     return 0;
   }
   //PGN ENGINE
   Engine engine(opt.get_pgn());
-  engine.parse();
+  if (!engine.parse())
+    return 1;
   return 0;
 }
