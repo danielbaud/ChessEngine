@@ -17,6 +17,7 @@ bool Human::play()
   {
     if (receive() != "go")
       return false;
+    std::cout << "What's your move? (lnln) : ";
     std::cin >> temp;
     send("bestmove " + temp);
     std::cout << receive() << std::endl;
