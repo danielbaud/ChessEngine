@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../../plugin/chessboard-interface.hh"
 
 enum Color
 {
@@ -38,7 +39,25 @@ public:
   Position get_position() const {return pos;}
   Color get_color() const {return color;}
 
-  bool move_to(const Position& pos);
+  plugin::Position get_plugin_position() const
+  {
+    return plugin::Position(static_cast<plugin::File>(static_cast<int>(pos.col))
+                       , static_cast<plugin::Rank>(static_cast<int>(pos.row)));
+  }
+
+  plugin::Color get_plugin_color() const
+  {
+    if (color == WHITE)
+      return plugin::Color::WHITE;
+    return plugin::Color::BLACK;
+  }
+
+  plugin::PieceType get_plugin_piecetype() const
+  {
+    return static_cast<plugin::PieceType>(type);
+  }
+
+  void move_to(const Position& p) {pos = p;}
 
   virtual std::vector<Position> get_possible_move() const = 0;
 
