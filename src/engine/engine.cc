@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     Engine engine(opt.get_port(), ladapter);
     if (!engine.start_game())
     {
-      std::cerr << "Client got bad move OR bad protocol" << std::endl;
+      std::cerr << "Client bad protocol" << std::endl;
       return 1;
     }
     return 0;

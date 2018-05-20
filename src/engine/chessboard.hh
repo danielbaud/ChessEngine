@@ -39,14 +39,15 @@ public:
   std::vector<Movement> get_possible_move() const;
   int get_piece_index(const Position& p) const;
 
+  bool rookw;
+  bool rookb;
+  Color turn;
+  plugin::ListenerAdapter ladapter;
+
 private:
 
   std::vector<Piece*> pieces;
   State state;
-  Color turn;
-  bool rookw;
-  bool rookb;
-  plugin::ListenerAdapter ladapter;
 };
 
 #include "chessboard.hxx"

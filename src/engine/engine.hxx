@@ -80,7 +80,11 @@ bool Engine::start_game()
   move1 = player1->receive_move();
   moves += " " + move1;
   if (!move(get_move(move1))) //DISQUALIFICATION
-    return false;
+  {
+    ladapter.on_player_disqualified(plugin::Color::WHITE);
+    ladapter.on_game_finished();
+    return true;
+  }
   player2->send("ucinewgame");
   State game = cbadapter.chessboard.get_state();
   while (game == WHITE_CHECK || game == BLACK_CHECK || game == RUNNING)
@@ -90,7 +94,10 @@ bool Engine::start_game()
     move2 = player2->receive_move();
     moves += " " + move2;
     if (!move(get_move(move2)))
-      return false;
+    {
+      ladapter.on_player_disqualified(plugin::Color::BLACK);
+      break;
+    }
     game = cbadapter.chessboard.get_state();
     if (game != BLACK_CHECK && game != WHITE_CHECK && game != RUNNING)
       break;
@@ -99,7 +106,10 @@ bool Engine::start_game()
     move1 = player1->receive_move();
     moves += " " + move1;
     if (!move(get_move(move1)))
-      return false;
+    {
+      ladapter.on_player_disqualified(plugin::Color::WHITE);
+      break;
+    }
     game = cbadapter.chessboard.get_state();
   }
   ladapter.on_game_finished();
