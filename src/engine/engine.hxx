@@ -31,17 +31,14 @@ std::string Player::receive_move()
 /* -------------------------------------------------------------------------- */
 
 
-Engine::Engine(unsigned short port)
+Engine::Engine(unsigned short port, plugin::ListenerAdapter lis)
 : player1(new Player(port, false)) , player2(new Player(port, true))
-{
-  chessboard = ChessBoard();
-}
+, chessboard(ChessBoard(lis)) , ladapter(lis)
+{}
 
-Engine::Engine(std::string pgn)
-{
-  chessboard = ChessBoard();
-  pgn_path = pgn;
-}
+Engine::Engine(std::string pgn, plugin::ListenerAdapter lis)
+: pgn_path(pgn) , chessboard(ChessBoard(lis)) , ladapter(lis)
+{}
 
 bool Engine::move(Movement m)
 {

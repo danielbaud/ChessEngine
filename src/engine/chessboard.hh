@@ -1,5 +1,6 @@
 #pragma once
 
+#include "listenerAdapter.hh"
 #include "pieces/piece.hh"
 #include "pieces/queen.hh"
 #include "pieces/king.hh"
@@ -29,7 +30,7 @@ class ChessBoard
 {
 public:
 
-  ChessBoard();
+  ChessBoard(plugin::ListenerAdapter lis);
 
   bool move(Movement& m);
   State get_state() const {return state;}
@@ -42,6 +43,7 @@ private:
   Color turn;
   bool rookw;
   bool rookb;
+  plugin::ListenerAdapter ladapter;
 };
 
 #include "chessboard.hxx"

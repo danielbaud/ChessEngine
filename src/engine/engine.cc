@@ -1,4 +1,5 @@
 #include "engine.hh"
+#include "listenerAdapter.hh"
 #include "option/option.hh"
 #include <iostream>
 
@@ -32,7 +33,10 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  // LOAD LISTENERS FIXME
+  /* ----------------- */
+
+  /* LISTENERS */
+  plugin::ListenerAdapter ladapter(opt.get_listeners());
 
   /* ----------------- */
 
@@ -40,7 +44,7 @@ int main(int argc, char **argv)
   if (opt.get_port())
   {
     // SERVER ENGINE
-    Engine engine(opt.get_port());
+    Engine engine(opt.get_port(), ladapter);
     if (!engine.start_game())
     {
       std::cerr << "Client got bad move OR bad protocol" << std::endl;
@@ -49,7 +53,7 @@ int main(int argc, char **argv)
     return 0;
   }
   //PGN ENGINE
-  Engine engine(opt.get_pgn());
+  Engine engine(opt.get_pgn(), ladapter);
   if (!engine.parse())
     return 1;
   return 0;

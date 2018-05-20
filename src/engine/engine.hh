@@ -1,5 +1,6 @@
 #pragma once
 
+#include "listenerAdapter.hh"
 #include "chessboard.hh"
 #include "../network-api/server-network-api.hh"
 #include "../network-api/common.hh"
@@ -28,8 +29,8 @@ class Engine
 
 public:
 
-  Engine(unsigned short port);
-  Engine(std::string pgn);
+  Engine(unsigned short port, plugin::ListenerAdapter lis);
+  Engine(std::string pgn, plugin::ListenerAdapter lis);
 
   bool move(Movement m);
   bool parse();
@@ -43,6 +44,7 @@ private:
   std::string pgn_path;
   ChessBoard chessboard;
   Movement get_move(const std::string& line);
+  plugin::ListenerAdapter ladapter;
 };
 
 #include "engine.hxx"
