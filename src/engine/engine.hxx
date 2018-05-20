@@ -44,7 +44,7 @@ bool Engine::move(Movement m)
 {
   if (m.from == m.to)
     return false;
-  return true;
+  return cbadapter.chessboard.move(m);
 }
 
 bool Engine::parse()
@@ -83,7 +83,7 @@ bool Engine::start_game()
     return false;
   player2->send("ucinewgame");
   State game = cbadapter.chessboard.get_state();
-  while (game == CHECK || game == RUNNING)
+  while (game == WHITE_CHECK || game == BLACK_CHECK || game == RUNNING)
   {
     player2->send(moves);
     player2->send("go");
@@ -92,7 +92,7 @@ bool Engine::start_game()
     if (!move(get_move(move2)))
       return false;
     game = cbadapter.chessboard.get_state();
-    if (game != CHECK && game != RUNNING)
+    if (game != BLACK_CHECK && game != WHITE_CHECK && game != RUNNING)
       break;
     player1->send(moves);
     player1->send("go");

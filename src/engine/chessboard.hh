@@ -12,7 +12,8 @@
 
 enum State
 {
-  CHECK, CHECKMATE, DRAW, TIMEOUT, RUNNING
+  WHITE_CHECK, WHITE_CHECKMATE, BLACK_CHECK, BLACK_CHECKMATE,
+  DRAW, TIMEOUT, RUNNING
 };
 
 class Movement
@@ -36,6 +37,7 @@ public:
   State get_state() const {return state;}
   std::vector<Piece*> get_pieces() const {return pieces;}
   std::vector<Movement> get_possible_move() const;
+  int get_piece_index(const Position& p) const;
 
 private:
 
