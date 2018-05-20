@@ -23,6 +23,9 @@ public:
   Position(Col c, Row r) : col(c) , row(r) {}
   Col col;
   Row row;
+
+  bool operator==(Position p1) {return p1.col == this->col
+                                    && p1.row == this->row;}
 };
 
 class Piece
@@ -41,7 +44,7 @@ public:
 
   char type;
 
-private:
+protected:
 
   Position pos;
   Color color;
