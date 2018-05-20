@@ -31,13 +31,13 @@ std::string Player::receive_move()
 /* -------------------------------------------------------------------------- */
 
 
-Engine::Engine(unsigned short port, plugin::ListenerAdapter lis)
+Engine::Engine(unsigned short port, plugin::ListenerAdapter& lis)
 : player1(new Player(port, false)) , player2(new Player(port, true))
-, chessboard(ChessBoard(lis)) , ladapter(lis)
+, cbadapter(plugin::ChessboardAdapter(lis)) , ladapter(lis)
 {}
 
-Engine::Engine(std::string pgn, plugin::ListenerAdapter lis)
-: pgn_path(pgn) , chessboard(ChessBoard(lis)) , ladapter(lis)
+Engine::Engine(std::string pgn, plugin::ListenerAdapter& lis)
+: pgn_path(pgn) , cbadapter(plugin::ChessboardAdapter(lis)) , ladapter(lis)
 {}
 
 bool Engine::move(Movement m)
@@ -55,6 +55,7 @@ bool Engine::parse()
 
 bool Engine::start_game()
 {
+  ladapter.register_board(cbadapter);
   std::string move1 = "";
   std::string move2 = "";
   std::string moves = "position startpos moves";
@@ -74,13 +75,14 @@ bool Engine::start_game()
   player1->send("ucinewgame");
   player1->send("go");
 
+  ladapter.on_game_started();
   /* GAME RUNNING */
   move1 = player1->receive_move();
   moves += " " + move1;
   if (!move(get_move(move1))) //DISQUALIFICATION
     return false;
   player2->send("ucinewgame");
-  State game = chessboard.get_state();
+  State game = cbadapter.chessboard.get_state();
   while (game == CHECK || game == RUNNING)
   {
     player2->send(moves);
@@ -89,7 +91,7 @@ bool Engine::start_game()
     moves += " " + move2;
     if (!move(get_move(move2)))
       return false;
-    game = chessboard.get_state();
+    game = cbadapter.chessboard.get_state();
     if (game != CHECK && game != RUNNING)
       break;
     player1->send(moves);
@@ -98,9 +100,9 @@ bool Engine::start_game()
     moves += " " + move1;
     if (!move(get_move(move1)))
       return false;
-    game = chessboard.get_state();
+    game = cbadapter.chessboard.get_state();
   }
-  //Game FINISHED
+  ladapter.on_game_finished();
   return true;
 }
 

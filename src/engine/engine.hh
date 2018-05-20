@@ -1,7 +1,7 @@
 #pragma once
 
-#include "listenerAdapter.hh"
-#include "chessboard.hh"
+#include "adapters/listenerAdapter.hh"
+#include "adapters/chessboardAdapter.hh"
 #include "../network-api/server-network-api.hh"
 #include "../network-api/common.hh"
 #include <string>
@@ -29,8 +29,8 @@ class Engine
 
 public:
 
-  Engine(unsigned short port, plugin::ListenerAdapter lis);
-  Engine(std::string pgn, plugin::ListenerAdapter lis);
+  Engine(unsigned short port, plugin::ListenerAdapter& lis);
+  Engine(std::string pgn, plugin::ListenerAdapter& lis);
 
   bool move(Movement m);
   bool parse();
@@ -42,9 +42,10 @@ public:
 private:
 
   std::string pgn_path;
-  ChessBoard chessboard;
-  Movement get_move(const std::string& line);
+  plugin::ChessboardAdapter cbadapter;
   plugin::ListenerAdapter ladapter;
+
+  Movement get_move(const std::string& line);
 };
 
 #include "engine.hxx"

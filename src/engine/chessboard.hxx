@@ -1,6 +1,6 @@
 #include "chessboard.hh"
 
-ChessBoard::ChessBoard(plugin::ListenerAdapter lis)
+ChessBoard::ChessBoard(plugin::ListenerAdapter& lis)
 : ladapter(lis)
 {
   pieces = std::vector<Piece*>();

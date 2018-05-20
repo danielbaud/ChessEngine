@@ -1,5 +1,5 @@
 #include "engine.hh"
-#include "listenerAdapter.hh"
+#include "adapters/listenerAdapter.hh"
 #include "option/option.hh"
 #include <iostream>
 

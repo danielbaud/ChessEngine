@@ -1,6 +1,6 @@
 #pragma once
 
-#include "listenerAdapter.hh"
+#include "adapters/listenerAdapter.hh"
 #include "pieces/piece.hh"
 #include "pieces/queen.hh"
 #include "pieces/king.hh"
@@ -30,10 +30,11 @@ class ChessBoard
 {
 public:
 
-  ChessBoard(plugin::ListenerAdapter lis);
+  ChessBoard(plugin::ListenerAdapter& lis);
 
   bool move(Movement& m);
   State get_state() const {return state;}
+  std::vector<Piece*> get_pieces() const {return pieces;}
   std::vector<Movement> get_possible_move() const;
 
 private:
