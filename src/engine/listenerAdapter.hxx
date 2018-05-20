@@ -9,8 +9,10 @@ ListenerAdapter::ListenerAdapter(std::vector<std::string> paths)
   for (unsigned i = 0; i < paths.size(); ++i)
   {
     void *handle = dlopen(paths[i].c_str(), RTLD_NOW);
-    handlers.push_back(handle);
     void *symbol = dlsym(handle, "listener_create");
+    if (!symbol)
+      continue;
+    handlers.push_back(handle);
     listeners.push_back(reinterpret_cast<Listener*(*)()>(symbol)());
   }
 }
