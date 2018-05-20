@@ -2,8 +2,8 @@
 #include <vector>
 #include <string>
 
-#include "../plugin/listener.hh"
-#include "../plugin/chessboard-interface.hh"
+#include "../../plugin/listener.hh"
+#include "../../plugin/chessboard-interface.hh"
 
 namespace plugin
 {
