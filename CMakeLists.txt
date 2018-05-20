@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project (Chess)
 link_libraries(-lboost_system)
+link_libraries(-pthread)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror -pedantic -std=c++17 -g")
 add_executable(chessengine src/engine/engine.cc)
+add_executable(human src/player/human.cc)
