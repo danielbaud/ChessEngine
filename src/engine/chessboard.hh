@@ -14,15 +14,26 @@ enum State
   CHECK, CHECKMATE, DRAW, TIMEOUT, RUNNING
 };
 
+class Movement
+{
+public:
+  Movement(Position p1, Position p2, char prom)
+  : from(p1) , to(p2) , promotion(prom) {}
+
+  Position from;
+  Position to;
+  char promotion;
+};
+
 class ChessBoard
 {
 public:
 
   ChessBoard();
 
-  bool move(Position p1, Position p2);
-  State get_state() const;
-  std::vector<Position> get_possible_move() const;
+  bool move(Movement& m);
+  State get_state() const {return state;}
+  std::vector<Movement> get_possible_move() const;
 
 private:
 
