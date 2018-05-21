@@ -34,7 +34,7 @@ class Piece
 
 public:
 
-  Piece(const Position& p, Color c) : pos(p) , color(c) {}
+  Piece(const Position& p, Color c, ChessBoard b) : pos(p) , color(c), chessboard(b) {}
 
   Position get_position() const {return pos;}
   Color get_color() const {return color;}
@@ -64,7 +64,7 @@ public:
   char type;
 
 protected:
-
+  ChessBoard chessboard;
   Position pos;
   Color color;
 };
