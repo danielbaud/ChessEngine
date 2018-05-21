@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+
+#include "../chessboard.hh"
 #include "../../plugin/chessboard-interface.hh"
 
 enum Color
@@ -34,7 +36,7 @@ class Piece
 
 public:
 
-  Piece(const Position& p, Color c, ChessBoard b) : pos(p) , color(c), chessboard(b) {}
+  Piece(const Position& p, Color c) : pos(p) , color(c) {}
 
   Position get_position() const {return pos;}
   Color get_color() const {return color;}
@@ -64,7 +66,6 @@ public:
   char type;
 
 protected:
-  ChessBoard chessboard;
   Position pos;
   Color color;
 };
