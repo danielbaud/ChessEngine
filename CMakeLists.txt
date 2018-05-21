@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.5)
 project (Chess)
 link_libraries(-lboost_system)
 link_libraries(-pthread)
