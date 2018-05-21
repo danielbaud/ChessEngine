@@ -4,6 +4,7 @@ import subprocess
 import sys
 import time
 import threading
+from printer import *
 output = ""
 CR   = '\33[31m'
 CG  = '\33[32m'
@@ -28,16 +29,18 @@ def throw(cmd):
      return main(funct);
    else:
      print(CR + "Noooooo" + CW )
-     return 1;
+     return quit();
 
 def main(classe):
   global output
   while True:
     if inside(output,"move"):
       print( CR + "enemy did: " + CP + output + CW)
+      gen_map(updated(output))
       output = ""
       process = classe.get_process()
-      process.stdin.write(b'e4e2\n')
+      strg = str(input()) + '\n' 
+      process.stdin.write(b +  strg)
       process.stdin.flush() 
       classe.set_process(process)
     time.sleep(1)
@@ -52,10 +55,8 @@ class speak(threading.Thread):
   def run(self):
     global output
     self.process = subprocess.Popen( self.cmd,stdin = subprocess.PIPE,  stdout=subprocess.PIPE,shell=True,stderr=subprocess.PIPE)
-    print("inside")
     while True:
       while True:
-        print (output, " ")
         try:
           text = str(self.process.stdout.readline())
           output += text[2:len(text) - 3]

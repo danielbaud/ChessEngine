@@ -1,12 +1,14 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 # -*- coding: utf-8 -*-
 from tkinter import *
-fen=Tk()
+"""fen=Tk()
 fen.focus()
-canvas=Canvas(fen, width=700, height=700,bg="brown")
+canvas=Canvas(fen, width=700, height=700,bg="brown")"""
 
 def gen_map(chess):
-    
+    fen=Tk()
+    fen.focus()
+    canvas=Canvas(fen, width=700, height=700,bg="brown")
     x = 9
     ratio = 700 / x
     rayon = ratio/2
@@ -28,8 +30,10 @@ def gen_map(chess):
         text = piece[0]
         canvas.create_oval(i*ratio +rayon + 5 ,j*ratio+rayon + 5,i*ratio+3*rayon - 5,j*ratio+3*rayon - 5,fill=color,width = 3,outline = "bisque2")
         x,y = (i*ratio +rayon + i*ratio+3*rayon)/2,(j*ratio+3*rayon + j*ratio+rayon)/2
-        canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")         
-            
+        canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")      
+        canvas.pack()
+        fen.mainloop()
+        
 def updated(text):
     chess = primaris()
     act = decompose(text)
@@ -131,6 +135,6 @@ def primaris():
                     table.append([noir[i],i,j,color])
     return table
 
-gen_map(updated('Ra1a4'))  
-canvas.pack()
-fen.mainloop() 
+#gen_map(updated('Ra1a4'))  
+#canvas.pack()
+#fen.mainloop() 
