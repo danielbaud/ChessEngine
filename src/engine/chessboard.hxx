@@ -14,8 +14,8 @@ ChessBoard::ChessBoard(plugin::ListenerAdapter& lis)
   pieces.push_back(new Queen(Position(D, ONE), WHITE));
   pieces.push_back(new King(Position(E, ONE), WHITE));
   pieces.push_back(new Bishop(Position(F, ONE), WHITE));
-  pieces.push_back(new Knight(Position(H, ONE), WHITE));
-  pieces.push_back(new Rook(Position(G, ONE), WHITE));
+  pieces.push_back(new Knight(Position(G, ONE), WHITE));
+  pieces.push_back(new Rook(Position(H, ONE), WHITE));
   pieces.push_back(new Pawn(Position(A, TWO), WHITE));
   pieces.push_back(new Pawn(Position(B, TWO), WHITE));
   pieces.push_back(new Pawn(Position(C, TWO), WHITE));
@@ -30,8 +30,8 @@ ChessBoard::ChessBoard(plugin::ListenerAdapter& lis)
   pieces.push_back(new Queen(Position(D, EIGHT), BLACK));
   pieces.push_back(new King(Position(E, EIGHT), BLACK));
   pieces.push_back(new Bishop(Position(F, EIGHT), BLACK));
-  pieces.push_back(new Knight(Position(H, EIGHT), BLACK));
-  pieces.push_back(new Rook(Position(G, EIGHT), BLACK));
+  pieces.push_back(new Knight(Position(G, EIGHT), BLACK));
+  pieces.push_back(new Rook(Position(H, EIGHT), BLACK));
   pieces.push_back(new Pawn(Position(A, SEVEN), BLACK));
   pieces.push_back(new Pawn(Position(B, SEVEN), BLACK));
   pieces.push_back(new Pawn(Position(C, SEVEN), BLACK));
