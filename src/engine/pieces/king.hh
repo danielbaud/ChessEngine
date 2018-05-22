@@ -8,7 +8,7 @@ public:
 
   King(const Position& p, Color c) : Piece(p, c) {type = 'K';}
 
-  std::vector<Position> get_possible_move() const;
+  std::vector<Position> get_possible_move(ChessBoard *c) const;
 };
 
 #include "king.hxx"

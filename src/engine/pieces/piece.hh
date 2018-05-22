@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-
-#include "../chessboard.hh"
 #include "../../plugin/chessboard-interface.hh"
+
+class ChessBoard;
 
 enum Color
 {
@@ -61,7 +61,7 @@ public:
 
   void move_to(const Position& p) {pos = p;}
 
-  virtual std::vector<Position> get_possible_move() const = 0;
+  virtual std::vector<Position> get_possible_move(ChessBoard *c) const = 0;
 
   char type;
 

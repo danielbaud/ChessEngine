@@ -1,7 +1,7 @@
 #include "king.hh"
 
-std::vector<Position> King::get_possible_move() const
+std::vector<Position> King::get_possible_move(ChessBoard *c) const
 {
-  //FIXME
+  (void)c;
   return std::vector<Position>();
 }

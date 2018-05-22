@@ -1,7 +1,7 @@
 #include "bishop.hh"
 
-std::vector<Position> Bishop::get_possible_move() const
+std::vector<Position> Bishop::get_possible_move(ChessBoard *c) const
 {
-  //FIXME
+  (void)c;
   return std::vector<Position>();
 }
