@@ -50,4 +50,6 @@ private:
   State state;
 };
 
+
+#include "pieces/piece.hxx"
 #include "chessboard.hxx"

@@ -3,6 +3,8 @@
 #include <vector>
 #include "../../plugin/chessboard-interface.hh"
 
+
+
 class ChessBoard;
 
 enum Color
@@ -57,6 +59,15 @@ public:
   plugin::PieceType get_plugin_piecetype() const
   {
     return static_cast<plugin::PieceType>(type);
+  }
+
+  int can_move_to(ChessBoard *c, int col, int row) const;
+
+  Position make_pos(int col, int row) const
+  {
+    int posc = static_cast<int>(pos.col + col);
+    int posr = static_cast<int>(pos.row + row);
+    return Position(static_cast<Col>(posc), static_cast<Row>(posr));
   }
 
   void move_to(const Position& p) {pos = p;}
