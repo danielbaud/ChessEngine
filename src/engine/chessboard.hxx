@@ -56,8 +56,7 @@ bool ChessBoard::move(Movement& m)
   int t = get_piece_index(m.to);
   if (f == -1 || pieces[f]->get_color() != turn)
     return false;
-  if (t > 0 && pieces[t]->get_color() == turn)
-    return false;
+
   std::vector<Position> poss = pieces[f]->get_possible_move(this);
   int goodmove = -1;
   for (unsigned i = 0; i < poss.size(); ++i)

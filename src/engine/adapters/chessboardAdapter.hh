@@ -23,7 +23,7 @@ namespace plugin
       std::vector<Piece*> pieces = chessboard.get_pieces();
       for (unsigned i = 0; i < pieces.size(); ++i)
       {
-	if (pieces[i]->get_position() == p)
+	if (pieces[i] && pieces[i]->get_position() == p)
 	{
 	  ret = side_piece_t(static_cast<PieceType>(pieces[i]->type),
 	                     pieces[i]->get_color() == WHITE?
