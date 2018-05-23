@@ -48,22 +48,22 @@ def updated(text):
         sto = -1 
         position = 0
         for piece in chess:
-            if piece[0:3] == move[0:3]:
+            if piece[1:3] == move[1:3]:
                 chess[pos][1] = move[3]
                 chess[pos][2] = move[4]
-                position = [chess[pos][1],chess[pos][2]]
-                sto = pos
+                position = chess[pos][1:3]
+                sto = chess[pos][3]
             pos +=1 
         pos = 0
         if position:
             for piece in chess: 
                 if piece[1:3] == position:
-                    if sto != pos:
-
+                    if sto != chess[pos][3]:
+                        print (chess.pop(pos))
                         chess.pop(pos)
 
                 pos +=1   
-    #print ( chess )
+    print ( chess )
     return chess
 
 def decompose(text):
@@ -115,7 +115,7 @@ def decompose(text):
             except:
                 pass
             try:
-                lst[y][x] = i - 1
+                lst[y][x] = 7 - (i - 1)
             except:
                 pass
             x += 1
@@ -124,13 +124,13 @@ def decompose(text):
     return lst
         
 def primaris():
-    blanc = ['R','N','B','Q','K','B','N','R']
+    blanc = ['R','N','B','K','Q','B','N','R']
     noir = ['R','N','B','K','Q','B','N','R']
-    color = 'white'
+    color = 'black'
     table = []
     for i in [0,1,6,7]:
         if i > 2:
-            color = 'black'
+            color = 'white'
         for j in range(8):
             if i == 1 or i == 6:
                 table.append(['P',i,j,color])
@@ -138,7 +138,7 @@ def primaris():
                 if i == 0:
                     table.append([blanc[j],i,j,color])
                 else:
-                    table.append([noir[i],i,j,color])
+                    table.append([noir[j],i,j,color])
     return table
 
 #gen_map(updated('Ra1a4'))  
