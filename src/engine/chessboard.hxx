@@ -52,28 +52,38 @@ int ChessBoard::get_piece_index(const Position& p) const
 
 bool ChessBoard::move(Movement& m)
 {
+  /* piece exists & is good color */
   int f = get_piece_index(m.from);
-  int t = get_piece_index(m.to);
-  if (f == -1 || pieces[f]->get_color() != turn)
+  Piece* moved = f == -1 ? nullptr : pieces[f];
+  if (!moved || moved->get_color() != turn)
     return false;
 
-  std::vector<Position> poss = pieces[f]->get_possible_move(this);
-  int goodmove = -1;
+  /* piece can move to destination */
+  std::vector<Position> poss = moved->get_possible_move(this);
+  bool goodmove = false;
   for (unsigned i = 0; i < poss.size(); ++i)
     if (poss[i] == m.to)
-      goodmove = i;
-  if (goodmove == -1)
+      goodmove = true;
+  if (!goodmove)
     return false;
+
+  /* if taken piece, removes it, else just move */
+  int t = get_piece_index(m.to);
+  Piece *taken = t == -1 ? nullptr : pieces[t];
+
   plugin::Position from = pieces[f]->get_plugin_position();
   pieces[f]->move_to(m.to);
   plugin::Position to = pieces[f]->get_plugin_position();
-  ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
-  if (t > 0)
+  if (taken)
   {
-    ladapter.on_piece_taken(pieces[t]->get_plugin_piecetype(),
-                            pieces[t]->get_plugin_position());
     pieces[t] = nullptr;
+    ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
+    ladapter.on_piece_taken(taken->get_plugin_piecetype(),
+                            taken->get_plugin_position());
   }
+  else
+    ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
+
   turn = turn == WHITE ? BLACK : WHITE;
   return true;
 }
