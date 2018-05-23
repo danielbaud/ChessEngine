@@ -82,7 +82,7 @@ bool Engine::start_game()
   if (!move(get_move(move1))) //DISQUALIFICATION
   {
     ladapter.on_player_disqualified(plugin::Color::WHITE);
-    ladapter.on_game_finished();
+    on_ending();
     return true;
   }
   player2->send("ucinewgame");
@@ -112,7 +112,7 @@ bool Engine::start_game()
     }
     game = cbadapter.chessboard.get_state();
   }
-  ladapter.on_game_finished();
+  on_ending();
   return true;
 }
 
@@ -132,4 +132,11 @@ Movement Engine::get_move(const std::string& line)
     return Movement(Position(A,ONE), Position(A,ONE), prom);
   return Movement(Position(clist[fromc], rlist[fromr]),
                   Position(clist[toc], rlist[tor]), prom);
+}
+
+void Engine::on_ending()
+{
+  player1->send("quit");
+  player2->send("quit");
+  ladapter.on_game_finished();
 }

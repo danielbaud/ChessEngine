@@ -35,6 +35,7 @@ public:
   bool move(Movement m);
   bool parse();
   bool start_game();
+  void on_ending();
 
   Player *player1;
   Player *player2;
