@@ -13,14 +13,22 @@ bool Human::play()
     return false;
   if (color)
     std::cout << receive() << std::endl;
-  while (true)
+
+  bool running = true;
+  std::string comm;
+  while (running)
   {
-    if (receive() != "go")
+    comm = receive();
+    if (comm == "quit")
+      break;
+    if (comm != "go")
       return false;
     std::cout << "What's your move? (lnln) : ";
     std::cin >> temp;
     send("bestmove " + temp);
-    std::cout << receive() << std::endl;
+    comm = receive();
+    std::cout << comm << std::endl;
+    running = (comm != "quit");
   }
   return true;
 }
