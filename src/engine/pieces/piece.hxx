@@ -23,3 +23,13 @@ int Piece::can_move_to(ChessBoard *c, int col, int row) const
       return -1;
     return 1;
 }
+
+std::vector<Position> Piece::move_check(std::vector<Position> p, ChessBoard *c)
+const
+{
+  std::vector<Position> res = std::vector<Position>();
+  for (unsigned i = 0; i < p.size(); ++i)
+    if (!c->is_check(pos, p[i], color))
+      res.push_back(p[i]);
+  return res;
+}

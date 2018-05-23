@@ -38,6 +38,7 @@ public:
   std::vector<Piece*> get_pieces() const {return pieces;}
   std::vector<Movement> get_possible_move() const;
   int get_piece_index(const Position& p) const;
+  bool is_check(Position p1, Position p2, Color color);
 
   bool rookw;
   bool rookb;

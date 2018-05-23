@@ -1,6 +1,6 @@
 #include "pawn.hh"
 
-std::vector<Position> Pawn::get_possible_move(ChessBoard *c) const
+std::vector<Position> Pawn::get_possible_move(ChessBoard *c, bool check) const
 {
   std::vector<Position> p = std::vector<Position>();
   int col = 1;
@@ -17,5 +17,7 @@ std::vector<Position> Pawn::get_possible_move(ChessBoard *c) const
     p.push_back(make_pos(-1, col));
   if (can_move_to(c, 1, col) == 1)
     p.push_back(make_pos(1, col));
+  if (check)
+    return move_check(p, c);
   return p;
 }

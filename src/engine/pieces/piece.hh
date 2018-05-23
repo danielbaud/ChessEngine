@@ -70,9 +70,11 @@ public:
     return Position(static_cast<Col>(posc), static_cast<Row>(posr));
   }
 
+  std::vector<Position> move_check(std::vector<Position> p, ChessBoard *c) const;
+
   void move_to(const Position& p) {pos = p;}
 
-  virtual std::vector<Position> get_possible_move(ChessBoard *c) const = 0;
+  virtual std::vector<Position> get_possible_move(ChessBoard *c, bool check) const = 0;
 
   char type;
 

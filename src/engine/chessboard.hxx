@@ -59,7 +59,7 @@ bool ChessBoard::move(Movement& m)
     return false;
 
   /* piece can move to destination */
-  std::vector<Position> poss = moved->get_possible_move(this);
+  std::vector<Position> poss = moved->get_possible_move(this, true);
   bool goodmove = false;
   for (unsigned i = 0; i < poss.size(); ++i)
     if (poss[i] == m.to)
@@ -86,4 +86,44 @@ bool ChessBoard::move(Movement& m)
 
   turn = turn == WHITE ? BLACK : WHITE;
   return true;
+}
+
+bool ChessBoard::is_check(Position p1, Position p2, Color c)
+{
+  int from = get_piece_index(p1);
+  Piece *moved = pieces[from];
+  if (from == -1)
+    return false;
+  int to = get_piece_index(p2);
+  Piece *removed = nullptr;
+  if (to > 0)
+    removed = pieces[to];
+  Piece *king = nullptr;
+  for (unsigned i = 0; !king; ++i)
+    if (pieces[i] && pieces[i]->get_color() == c && pieces[i]->type == 'K')
+      king = pieces[i];
+  if (removed)
+    pieces[to] = nullptr;
+  moved->move_to(p2);
+  for (unsigned i = 0; i < pieces.size(); ++i)
+  {
+    if (pieces[i] && pieces[i]->get_color() != c)
+    {
+      std::vector<Position> poss = pieces[i]->get_possible_move(this, false);
+      for (unsigned j = 0; j < poss.size(); ++j)
+      {
+	if (poss[j] == king->get_position())
+	{
+	  if (removed)
+	    pieces[to] = removed;
+	  moved->move_to(p1);
+	  return true;
+	}
+      }
+    }
+  }
+  if (removed)
+    pieces[to] = removed;
+  moved->move_to(p1);
+  return false;
 }
