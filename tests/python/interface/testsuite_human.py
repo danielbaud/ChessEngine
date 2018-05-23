@@ -36,11 +36,14 @@ def main(classe):
   while True:
     if inside(output,"move"):
       print( CR + "enemy did: " + CP + output + CW)
-      gen_map(updated(output))
-      output = ""
+      text = updated(output)
+      targ = threading.Thread(target = gen_map, args = [text])
+      targ.start()
       process = classe.get_process()
+      output = ""
+      print( "play plz" )
       strg = str(input()) + '\n' 
-      process.stdin.write(b +  strg)
+      process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush() 
       classe.set_process(process)
     time.sleep(1)

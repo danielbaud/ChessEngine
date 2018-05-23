@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from tkinter import *
 """fen=Tk()
@@ -31,13 +31,18 @@ def gen_map(chess):
         canvas.create_oval(i*ratio +rayon + 5 ,j*ratio+rayon + 5,i*ratio+3*rayon - 5,j*ratio+3*rayon - 5,fill=color,width = 3,outline = "bisque2")
         x,y = (i*ratio +rayon + i*ratio+3*rayon)/2,(j*ratio+3*rayon + j*ratio+rayon)/2
         canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")      
-        canvas.pack()
-        fen.mainloop()
+    canvas.pack()
+    fen.mainloop()
+
         
 def updated(text):
     chess = primaris()
     act = decompose(text)
-    
+    pos = 0
+    for i in act:
+        act[pos][1],act[pos][2] = act[pos][2],act[pos][1]
+        act[pos][3],act[pos][4] = act[pos][4],act[pos][3]
+        pos += 1
     for move in act:
         pos = 0
         sto = -1 
@@ -57,7 +62,8 @@ def updated(text):
 
                         chess.pop(pos)
 
-                pos +=1    
+                pos +=1   
+    #print ( chess )
     return chess
 
 def decompose(text):
