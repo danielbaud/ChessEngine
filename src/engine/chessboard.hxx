@@ -83,6 +83,7 @@ bool ChessBoard::move(Movement& m)
   }
   else
     ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
+  update_state();
 
   turn = turn == WHITE ? BLACK : WHITE;
   return true;
@@ -126,4 +127,63 @@ bool ChessBoard::is_check(Position p1, Position p2, Color c)
     pieces[to] = removed;
   moved->move_to(p1);
   return false;
+}
+
+bool ChessBoard::is_check(Color c)
+{
+  Piece *king = nullptr;
+  for (unsigned i = 0; !king; ++i)
+    if (pieces[i] && pieces[i]->get_color() == c && pieces[i]->type == 'K')
+      king = pieces[i];
+  for (unsigned i = 0; i < pieces.size(); ++i)
+  {
+    if (pieces[i] && pieces[i]->get_color() != c)
+    {
+      std::vector<Position> poss = pieces[i]->get_possible_move(this, false);
+      for (unsigned j = 0; j < poss.size(); ++j)
+      {
+        if (poss[j] == king->get_position())
+  	  return true;
+      }
+    }
+  }
+  return false;
+}
+
+void ChessBoard::update_state()
+{
+  state = RUNNING;
+  if (turn == WHITE)
+  {
+    if (is_check(BLACK))
+      state = BLACK_CHECK;
+  }
+  else
+  {
+    if (is_check(WHITE))
+      state = WHITE_CHECK;
+  }
+  bool can_move = false;
+  for (unsigned i = 0; i < pieces.size(); ++i)
+  {
+    if (pieces[i] && pieces[i]->get_color() != turn)
+    {
+      std::vector<Position> p = pieces[i]->get_possible_move(this, true);
+      if (p.size())
+        can_move = true;
+    }
+  }
+  if (!can_move)
+  {
+    if (state == BLACK_CHECK)
+      state = BLACK_CHECKMATE;
+    else if (state == WHITE_CHECK)
+      state = WHITE_CHECKMATE;
+    else
+      state = DRAW;
+  }
+  if (state == BLACK_CHECK)
+    ladapter.on_player_check(plugin::Color::BLACK);
+  if (state == WHITE_CHECK)
+    ladapter.on_player_check(plugin::Color::WHITE);
 }

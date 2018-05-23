@@ -112,6 +112,17 @@ bool Engine::start_game()
     }
     game = cbadapter.chessboard.get_state();
   }
+  if (game == WHITE_CHECKMATE)
+    ladapter.on_player_mat(plugin::Color::WHITE);
+  if (game == BLACK_CHECKMATE)
+    ladapter.on_player_mat(plugin::Color::BLACK);
+  if (game == DRAW)
+  {
+    if (cbadapter.chessboard.get_turn() == WHITE)
+      ladapter.on_player_pat(plugin::Color::BLACK);
+    if (cbadapter.chessboard.get_turn() == BLACK)
+      ladapter.on_player_pat(plugin::Color::WHITE);
+  }
   on_ending();
   return true;
 }
