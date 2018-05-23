@@ -25,6 +25,7 @@ void BoardListener::on_game_finished()
 void BoardListener::on_piece_moved(const PieceType piece, const Position& from,
                                   const Position& to)
 {
+  print_board();
   if (piece == PieceType::PAWN)
     std::cout << "Pawn ";
   else if (piece == PieceType::KING)
@@ -43,7 +44,6 @@ void BoardListener::on_piece_moved(const PieceType piece, const Position& from,
   std::cout << " to ";
   std::cout << static_cast<char>('A' + static_cast<int>(to.file_get()));
   std::cout << static_cast<char>('1' + static_cast<int>(to.rank_get())) << std::endl;
-  print_board();
 }
 
 void BoardListener::on_piece_taken(const PieceType piece, const Position& at)
@@ -61,8 +61,8 @@ void BoardListener::on_piece_taken(const PieceType piece, const Position& at)
   else if (piece == PieceType::ROOK)
     std::cout << "Rook ";
   std::cout << "taken at ";
-  std::cout << 'A' + static_cast<int>(at.file_get());
-  std::cout << '1' + static_cast<int>(at.rank_get()) << std::endl;
+  std::cout << static_cast<char>('A' + static_cast<int>(at.file_get()));
+  std::cout << static_cast<char>('1' + static_cast<int>(at.rank_get())) << std::endl;
 }
 
 void BoardListener::on_piece_promoted(const PieceType piece, const Position& at)
@@ -76,8 +76,8 @@ void BoardListener::on_piece_promoted(const PieceType piece, const Position& at)
   else if (piece == PieceType::ROOK)
     std::cout << "Rook ";
   std::cout << "promoted at ";
-  std::cout << 'A' + static_cast<int>(at.file_get());
-  std::cout << '1' + static_cast<int>(at.rank_get()) << std::endl;
+  std::cout << static_cast<char>('A' + static_cast<int>(at.file_get()));
+  std::cout << static_cast<char>('1' + static_cast<int>(at.rank_get())) << std::endl;
 }
 
 void BoardListener::on_kingside_castling(const Color color)
@@ -156,7 +156,7 @@ void BoardListener::print_board()
   std::string grayback("\x1B[100m");
   for (int i = 7; i >= 0; --i)
   {
-    std::cout << i+1 << "  ";
+    std::cout << "   " <<  i+1 << "   ";
     for (int j = 0; j < 8; ++j)
     {
       if ((i+j) % 2 == 1)
@@ -179,7 +179,7 @@ void BoardListener::print_board()
     }
     std::cout << "\x1b[0m" <<  std::endl;
   }
-  std::cout << std::endl  << "    A  B  C  D  E  F  G  H" << std::endl;
+  std::cout << std::endl << "        A  B  C  D  E  F  G  H" << std::endl << std::endl;
 }
 
 LISTENER_EXPORT(BoardListener);
