@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from tkinter import *
+import time
 """fen=Tk()
 fen.focus()
 canvas=Canvas(fen, width=700, height=700,bg="brown")"""
-
+play = ""
 def gen_map(chess):
+    global ratio,rayon,fen,play
+    play = ""
     fen=Tk()
     canvas=Canvas(fen, width=700, height=700,bg="brown")
     x = 9
@@ -33,10 +36,21 @@ def gen_map(chess):
         canvas.create_oval(i*ratio +rayon + 5 ,j*ratio+rayon + 5,i*ratio+3*rayon - 5,j*ratio+3*rayon - 5,fill=color,width = 3,outline = "bisque2")
         x,y = (i*ratio +rayon + i*ratio+3*rayon)/2,(j*ratio+3*rayon + j*ratio+rayon)/2
         canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")      
-    canvas.pack()
-    fen.mainloop()
-    fen.destroy()
-        
+    
+    canvas.bind("<Button-1>", reset)
+
+    play = loop()
+    if len(play) < 4:
+      canvas.pack()
+      fen.mainloop()    
+    return play
+def loop():
+    global play
+    if len(play) < 4:
+        fen.after(1000,loop)
+    else:
+        fen.destroy()
+    return play   
 def updated(text):
     chess = primaris()
     act = decompose(text)
@@ -52,20 +66,24 @@ def updated(text):
         for piece in chess:
             if piece[1:3] == move[1:3]:
                 if piece[0] == 'K' and abs(chess[pos][2] - move[4] ) > 1:
-                  R = ['R',act[pos][3],0,act[pos][3],0] 
                   if (chess[pos][2] - move[4]) > 0:
-                    R[2] = 0
-                    R[4] = chess[pos][2] - 1
+                    pre_act = 0
+                    post_act = chess[pos][2] - 1
                   else:
-                    R[2] = 7
-                    R[4] = chess[pos][2] + 1
-                  act = act[0:pos + 1]  + R + act[pos + 1:len(act)]
+                    pre_act = 7
+                    post_act = chess[pos][2] + 1
+                  pos_rook = 0
+                  for i in chess:
+                    if i[1] == chess[pos][1] and i[2] == pre_act:
+                      chess[pos_rook][2] = post_act
+                    pos_rook += 1 
                 chess[pos][1] = move[3]
                 chess[pos][2] = move[4]
                 position = chess[pos][1:3]
                 sto = chess[pos][3]
             pos +=1 
         pos = 0
+        print (act)
         if position:
             for piece in chess: 
                 if piece[1:3] == position:
@@ -150,7 +168,13 @@ def primaris():
                 else:
                     table.append([noir[j],i,j,color])
     return table
-
+def reset(event):
+    global play
+    X = ['a','b','c','d','e','f','g','h'][int((event.x - rayon)/ratio)]
+    Y = str(int(9 - (event.y - rayon)/ratio ) ) 
+    play += X + Y
+    
 #gen_map(updated('Ra1a4'))  
+
 #canvas.pack()
 #fen.mainloop() 

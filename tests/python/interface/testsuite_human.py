@@ -44,29 +44,17 @@ def main(classe,sto):
       sto = "" 
       print( CR + "move done: " + CP + output + CW)
       text = updated(output)
-      if fen_2 != 0:
-        fen_2.do_run = False
-        fen_2.join()
-        fen_2 = 0
-      fen_1 = threading.Thread(target = gen_map, args = [text])
-      fen_1.start()
       process = classe.get_process()
       text = output
       output = ""
+      play = ""
       print( "play plz" )
-      strg = str(input()) 
-      text += " " + strg
-      strg += '\n' 
-      process.stdin.write(strg.encode('utf-8'))
-      process.stdin.flush() 
-      classe.set_process(process)
       text = updated(text)
-      if fen_1 != 0:
-        fen_1.do_run = False
-        fen_1.join()
-        fen_1 = 0
-      fen_2 = threading.Thread(target = gen_map, args = [text])
-      fen_2.start()
+      play = gen_map(text)
+      strg = play + '\n' 
+      process.stdin.write(strg.encode('utf-8'))
+      process.stdin.flush()
+      classe.set_process(process)
     time.sleep(1)
   return 0
      
