@@ -63,6 +63,11 @@ bool ChessBoard::move(Movement& m)
   if (!moved || moved->get_color() != turn)
     return false;
 
+  /* check if promotion is revelant */
+  Piece *promoted = promotion(moved, m);
+  if (!promoted && m.promotion)
+    return false;
+
   /* piece can move to destination */
   std::vector<Position> poss = moved->get_possible_move(this, true);
   bool goodmove = false;
@@ -90,6 +95,8 @@ bool ChessBoard::move(Movement& m)
   plugin::Position from = moved->get_plugin_position();
   moved->move_to(m.to);
   plugin::Position to = moved->get_plugin_position();
+  if (m.promotion)
+    pieces[f] = promoted;
   if (taken)
   {
     pieces[t] = nullptr;
@@ -99,6 +106,10 @@ bool ChessBoard::move(Movement& m)
   }
   else
     ladapter.on_piece_moved(moved->get_plugin_piecetype(), from, to);
+
+  if (m.promotion)
+    ladapter.on_piece_promoted(promoted->get_plugin_piecetype(),
+                               promoted->get_plugin_position());
 
   if (moved->type == 'K')
   {
@@ -319,4 +330,36 @@ int ChessBoard::castling(Piece *moved, Movement& m)
     return -1;
   }
   return 0;
+}
+
+Piece *ChessBoard::promotion(Piece *moved, Movement& m)
+{
+  char prom = m.promotion;
+  Row r = EIGHT;
+  if (turn == BLACK)
+    r = ONE;
+  if ((prom != 0) != (moved->type == 'P' && m.to.row == r))
+    return nullptr;
+  if (prom != 'Q' && prom != 'B' && prom != 'K' && prom != 'R')
+    return nullptr;
+  Piece *ret = nullptr;
+  switch (prom)
+  {
+    case 'Q':
+        ret = new Queen(m.to, turn);
+	break;
+
+    case 'R':
+        ret = new Rook(m.to, turn);
+	break;
+
+    case 'N':
+        ret = new Knight(m.to, turn);
+	break;
+
+    case 'B':
+        ret = new Bishop(m.to, turn);
+	break;
+  }
+  return ret;
 }
