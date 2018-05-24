@@ -11,9 +11,14 @@ CG  = '\33[32m'
 CW  = '\33[37m'
 CB  = '\33[96m'
 CP = '\33[95m'
-
+fen_1 = 0
+fen_2 = 0
 def start():
+    print ("IP or empty for local")
+    text = input()
     port = "./human 127.0.0.1 "
+    if len(text) != 0:
+        port = "./human " + text + " "
     print( CB + "give me a port" + CW ,)
     port += str(input())
     return throw(port)
@@ -25,27 +30,43 @@ def throw(cmd):
    time.sleep(1)
    if inside(output,"WHITE") or inside(output,"BLACK") :
      print(CG + "I am alive" + CW + " I am " + output )
+     sto = output
      output = ""
-     return main(funct);
+     return main(funct,sto);
    else:
      print(CR + "Noooooo" + CW )
      return quit();
 
-def main(classe):
-  global output
+def main(classe,sto):
+  global output,fen_2,fen_1
   while True:
-    if inside(output,"move"):
-      print( CR + "enemy did: " + CP + output + CW)
+    if len(output) != 0 or inside(sto,"WHITE"):
+      sto = "" 
+      print( CR + "move done: " + CP + output + CW)
       text = updated(output)
-      targ = threading.Thread(target = gen_map, args = [text])
-      targ.start()
+      if fen_2 != 0:
+        fen_2.do_run = False
+        fen_2.join()
+        fen_2 = 0
+      fen_1 = threading.Thread(target = gen_map, args = [text])
+      fen_1.start()
       process = classe.get_process()
+      text = output
       output = ""
       print( "play plz" )
-      strg = str(input()) + '\n' 
+      strg = str(input()) 
+      text += " " + strg
+      strg += '\n' 
       process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush() 
       classe.set_process(process)
+      text = updated(text)
+      if fen_1 != 0:
+        fen_1.do_run = False
+        fen_1.join()
+        fen_1 = 0
+      fen_2 = threading.Thread(target = gen_map, args = [text])
+      fen_2.start()
     time.sleep(1)
   return 0
      
