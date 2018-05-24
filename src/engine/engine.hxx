@@ -122,6 +122,7 @@ bool Engine::start_game()
       ladapter.on_player_pat(plugin::Color::BLACK);
     if (cbadapter.chessboard.get_turn() == BLACK)
       ladapter.on_player_pat(plugin::Color::WHITE);
+    ladapter.on_draw();
   }
   on_ending();
   return true;
