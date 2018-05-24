@@ -66,20 +66,24 @@ def updated(text):
         for piece in chess:
             if piece[1:3] == move[1:3]:
                 if piece[0] == 'K' and abs(chess[pos][2] - move[4] ) > 1:
-                  R = ['R',act[pos][3],0,act[pos][3],0] 
                   if (chess[pos][2] - move[4]) > 0:
-                    R[2] = 0
-                    R[4] = chess[pos][2] - 1
+                    pre_act = 0
+                    post_act = chess[pos][2] - 1
                   else:
-                    R[2] = 7
-                    R[4] = chess[pos][2] + 1
-                  act = act[0:pos + 1]  + R + act[pos + 1:len(act)]
+                    pre_act = 7
+                    post_act = chess[pos][2] + 1
+                  pos_rook = 0
+                  for i in chess:
+                    if i[1] == chess[pos][1] and i[2] == pre_act:
+                      chess[pos_rook][2] = post_act
+                    pos_rook += 1 
                 chess[pos][1] = move[3]
                 chess[pos][2] = move[4]
                 position = chess[pos][1:3]
                 sto = chess[pos][3]
             pos +=1 
         pos = 0
+        print (act)
         if position:
             for piece in chess: 
                 if piece[1:3] == position:

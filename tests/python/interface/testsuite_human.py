@@ -54,7 +54,6 @@ def main(classe,sto):
       strg = play + '\n' 
       process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush()
-      print("flush") 
       classe.set_process(process)
     time.sleep(1)
   return 0
