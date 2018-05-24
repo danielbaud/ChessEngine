@@ -30,17 +30,19 @@ def throw(cmd):
    time.sleep(1)
    if inside(output,"WHITE") or inside(output,"BLACK") :
      print(CG + "I am alive" + CW + " I am " + output )
+     sto = output
      output = ""
-     return main(funct);
+     return main(funct,sto);
    else:
      print(CR + "Noooooo" + CW )
      return quit();
 
-def main(classe):
+def main(classe,sto):
   global output,fen_2,fen_1
   while True:
-    if inside(output,"move") or inside(output,"WHITE"):
-      print( CR + "enemy did: " + CP + output + CW)
+    if len(output) != 0 or inside(sto,"WHITE"):
+      sto = "" 
+      print( CR + "move done: " + CP + output + CW)
       text = updated(output)
       if fen_2 != 0:
         fen_2.do_run = False

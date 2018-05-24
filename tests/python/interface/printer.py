@@ -7,7 +7,6 @@ canvas=Canvas(fen, width=700, height=700,bg="brown")"""
 
 def gen_map(chess):
     fen=Tk()
-    fen.focus()
     canvas=Canvas(fen, width=700, height=700,bg="brown")
     x = 9
     ratio = 700 / x
@@ -18,7 +17,10 @@ def gen_map(chess):
         canvas.create_line(total+rayon,maxi-rayon,total+rayon,0+rayon,fill="gold",width = 2)
         canvas.create_line(maxi-rayon,total+rayon,0+rayon,total+rayon,fill="gold",width = 2) 
     for i in range(8):
+        canvas.create_text(i*ratio + ratio, rayon/2,text=['A','B','C','D','E','F','G','H'][i], font="Stencil 20", fill="blue")
         for j in range(8):
+            if i == 0:
+              canvas.create_text(rayon/2, j*ratio + ratio,text =str(7-j+1), font="Stencil 20", fill="blue")
             if (i+j)%2:
                 canvas.create_rectangle(i*ratio +rayon + 2,j*ratio+rayon + 2,i*ratio+3*rayon - 2,j*ratio+3*rayon - 2,fill="peru",width = 2)
             else:
@@ -33,7 +35,7 @@ def gen_map(chess):
         canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")      
     canvas.pack()
     fen.mainloop()
-
+    fen.destroy()
         
 def updated(text):
     chess = primaris()
@@ -49,6 +51,15 @@ def updated(text):
         position = 0
         for piece in chess:
             if piece[1:3] == move[1:3]:
+                if piece[0] == 'K' and abs(chess[pos][2] - move[4] ) > 1:
+                  R = ['R',act[pos][3],0,act[pos][3],0] 
+                  if (chess[pos][2] - move[4]) > 0:
+                    R[2] = 0
+                    R[4] = chess[pos][2] - 1
+                  else:
+                    R[2] = 7
+                    R[4] = chess[pos][2] + 1
+                  act = act[0:pos + 1]  + R + act[pos + 1:len(act)]
                 chess[pos][1] = move[3]
                 chess[pos][2] = move[4]
                 position = chess[pos][1:3]
@@ -59,11 +70,10 @@ def updated(text):
             for piece in chess: 
                 if piece[1:3] == position:
                     if sto != chess[pos][3]:
-                        print (chess.pop(pos))
                         chess.pop(pos)
 
                 pos +=1   
-    print ( chess )
+    #print ( chess )
     return chess
 
 def decompose(text):
@@ -124,8 +134,8 @@ def decompose(text):
     return lst
         
 def primaris():
-    blanc = ['R','N','B','K','Q','B','N','R']
-    noir = ['R','N','B','K','Q','B','N','R']
+    blanc = ['R','N','B','Q','K','B','N','R']
+    noir = ['R','N','B','Q','K','B','N','R']
     color = 'black'
     table = []
     for i in [0,1,6,7]:
