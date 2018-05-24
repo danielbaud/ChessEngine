@@ -41,10 +41,14 @@ public:
   int get_piece_index(const Position& p) const;
   bool is_check(Position p1, Position p2, Color color);
   bool is_check(Color color);
+  void manage_special(Movement& m);
+  int castling(Piece *moved, Movement& m);
   void update_state();
 
-  bool rookw;
-  bool rookb;
+  bool queenside_white;
+  bool kingside_white;
+  bool queenside_black;
+  bool kingside_black;
   Color turn;
   plugin::ListenerAdapter ladapter;
 
