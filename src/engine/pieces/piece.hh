@@ -38,7 +38,7 @@ class Piece
 
 public:
 
-  Piece(const Position& p, Color c) : pos(p) , color(c) {}
+  Piece(const Position& p, Color c) : passant(false) , pos(p) , color(c) {}
 
   Position get_position() const {return pos;}
   Color get_color() const {return color;}
@@ -77,6 +77,7 @@ public:
   virtual std::vector<Position> get_possible_move(ChessBoard *c, bool check) const = 0;
 
   char type;
+  bool passant;
 
 protected:
   Position pos;

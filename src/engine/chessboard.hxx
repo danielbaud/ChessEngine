@@ -6,8 +6,10 @@ ChessBoard::ChessBoard(plugin::ListenerAdapter& lis)
   pieces = std::vector<Piece*>();
   state = RUNNING;
   turn = WHITE;
-  rookw = true;
-  rookb = true;
+  queenside_white = true;
+  kingside_white = true;
+  queenside_black = true;
+  kingside_black = true;
   pieces.push_back(new Rook(Position(A, ONE), WHITE));
   pieces.push_back(new Knight(Position(B, ONE), WHITE));
   pieces.push_back(new Bishop(Position(C, ONE), WHITE));
@@ -52,6 +54,9 @@ int ChessBoard::get_piece_index(const Position& p) const
 
 bool ChessBoard::move(Movement& m)
 {
+  /* manages en passant that fades and possible castlings */
+  manage_special(m);
+
   /* piece exists & is good color */
   int f = get_piece_index(m.from);
   Piece* moved = f == -1 ? nullptr : pieces[f];
@@ -67,22 +72,47 @@ bool ChessBoard::move(Movement& m)
   if (!goodmove)
     return false;
 
+  /* if castling, function castling(..) makes it, returns -1 if failed one */
+  int cast = castling(moved, m);
+  if (cast == 1)
+  {
+    update_state();
+    turn = turn == WHITE ? BLACK : WHITE;
+    return true;
+  }
+  else if (cast == -1)
+    return false;
+
   /* if taken piece, removes it, else just move */
   int t = get_piece_index(m.to);
   Piece *taken = t == -1 ? nullptr : pieces[t];
 
-  plugin::Position from = pieces[f]->get_plugin_position();
-  pieces[f]->move_to(m.to);
-  plugin::Position to = pieces[f]->get_plugin_position();
+  plugin::Position from = moved->get_plugin_position();
+  moved->move_to(m.to);
+  plugin::Position to = moved->get_plugin_position();
   if (taken)
   {
     pieces[t] = nullptr;
-    ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
+    ladapter.on_piece_moved(moved->get_plugin_piecetype(), from, to);
     ladapter.on_piece_taken(taken->get_plugin_piecetype(),
                             taken->get_plugin_position());
   }
   else
-    ladapter.on_piece_moved(pieces[f]->get_plugin_piecetype(), from, to);
+    ladapter.on_piece_moved(moved->get_plugin_piecetype(), from, to);
+
+  if (moved->type == 'K')
+  {
+    if (turn == WHITE)
+    {
+      queenside_white = false;
+      kingside_white = false;
+    }
+    else
+    {
+      queenside_black = false;
+      kingside_black = false;
+    }
+  }
   update_state();
 
   turn = turn == WHITE ? BLACK : WHITE;
@@ -186,4 +216,107 @@ void ChessBoard::update_state()
     ladapter.on_player_check(plugin::Color::BLACK);
   if (state == WHITE_CHECK)
     ladapter.on_player_check(plugin::Color::WHITE);
+}
+
+void ChessBoard::manage_special(Movement& m)
+{
+  for (unsigned i = 0; i < pieces.size(); ++i)
+  {
+    if (pieces[i] && pieces[i]->type == 'P' && pieces[i]->get_color() == turn)
+      pieces[i]->passant = false;
+  }
+  if (turn == WHITE)
+  {
+    if (m.from == Position(A, ONE))
+      queenside_white = false;
+    else if (m.from == Position(H, ONE))
+      kingside_white = false;
+  }
+  else
+  {
+    if (m.from == Position(A, EIGHT))
+      queenside_black = false;
+    else if (m.from == Position(H, EIGHT))
+      kingside_black = false;
+  }
+}
+
+int ChessBoard::castling(Piece *moved, Movement& m)
+{
+  if (moved->type != 'K')
+    return 0;
+  Row r = ONE;
+  bool kingside = kingside_white;
+  bool queenside = queenside_white;
+  if (turn == BLACK)
+  {
+    r = EIGHT;
+    kingside = kingside_black;
+    queenside = queenside_black;
+  }
+  if (m.from == Position(E, r) && m.to == Position(G, r))
+  {
+    if (is_check(turn) || is_check(Position(E, r), Position(F, r), turn))
+      return -1;
+    if (kingside)
+    {
+      plugin::Position f = moved->get_plugin_position();
+      moved->move_to(m.to);
+      plugin::Position t = moved->get_plugin_position();
+      for (unsigned i = 0; i < pieces.size(); ++i)
+      {
+	if (pieces[i] && pieces[i]->get_position() == Position(H, r))
+	{
+	  pieces[i]->move_to(Position(F, r));
+	}
+      }
+      ladapter.on_piece_moved(plugin::PieceType::KING, f, t);
+      ladapter.on_kingside_castling(moved->get_plugin_color());
+      if (turn == WHITE)
+      {
+	queenside_white = false;
+	kingside_white = false;
+      }
+      else
+      {
+	queenside_black = false;
+	kingside_black = false;
+      }
+      return 1;
+    }
+    return -1;
+  }
+  else if (m.from == Position(E, r) && m.to == Position(C, r))
+  {
+    if (is_check(turn) || is_check(Position(E, r), Position(D, r), turn))
+      return -1;
+    if (queenside)
+    {
+      plugin::Position f = moved->get_plugin_position();
+      moved->move_to(m.to);
+      plugin::Position t = moved->get_plugin_position();
+      for (unsigned i = 0; i < pieces.size(); ++i)
+      {
+	if (pieces[i] && pieces[i]->get_position() == Position(A, r))
+	{
+	  pieces[i]->move_to(Position(D, r));
+	}
+      }
+      ladapter.on_piece_moved(plugin::PieceType::KING, f, t);
+      ladapter.on_queenside_castling(moved->get_plugin_color());
+      if (turn == WHITE)
+      {
+	queenside_white = false;
+	kingside_white = false;
+      }
+      else
+      {
+	queenside_black = false;
+	kingside_black = false;
+      }
+      return 1;
+    }
+    return -1;
+  }
+  return 0;
 }
