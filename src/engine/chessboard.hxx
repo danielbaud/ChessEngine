@@ -64,8 +64,11 @@ bool ChessBoard::move(Movement& m)
     return false;
 
   /* check if promotion is revelant */
+  Row r = EIGHT;
+  if (turn == BLACK)
+    r = ONE;
   Piece *promoted = promotion(moved, m);
-  if (!promoted && m.promotion)
+  if (!promoted && (m.promotion != 0 || (moved->type == 'P' && m.to.row == r)))
     return false;
 
   /* piece can move to destination */
