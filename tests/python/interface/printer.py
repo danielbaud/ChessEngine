@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from tkinter import *
 import time
+from chose_piece import *
 """fen=Tk()
 fen.focus()
 canvas=Canvas(fen, width=700, height=700,bg="brown")"""
@@ -44,6 +45,17 @@ def gen_map(chess):
     if len(play) < 4:
       canvas.pack()
       fen.mainloop()    
+    x = ['a','b','c','d','e','f','g','h'].index(play[0])
+    y = int(play[1]) - 1
+    z = int(play[3]) - 1
+    pos = 0
+    for i in chess:
+      
+      print(y,x,i[1],i[2])
+      if i[0] == 'P' and y == i[1] and x == i[2] and (z == 0 or z == 7):
+        play += gen_piece()
+        chess[pos][0] = play[4] 
+      pos += 1
     return play
 def loop():
     global play
