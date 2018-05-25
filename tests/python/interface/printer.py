@@ -46,14 +46,11 @@ def gen_map(chess):
       canvas.pack()
       fen.mainloop()    
     x = ['a','b','c','d','e','f','g','h'].index(play[0])
-    y = int(play[1]) - 1
+    y = 8 - int(play[1])  
     z = int(play[3]) - 1
-    pos = 0
     for i in chess:
       if i[0] == 'P' and y == i[1] and x == i[2] and (z == 0 or z == 7):
         play += gen_piece()
-        chess[pos][0] = play[4] 
-      pos += 1
     return play
 def loop():
     global play
@@ -67,13 +64,14 @@ def updated(text):
     act = decompose(text)
     pos = 0
     color_pos = [-1,-1]
+    pp = [[-1,-1],[-1,-1]]
     for i in act:
         act[pos][1],act[pos][2] = act[pos][2],act[pos][1]
         act[pos][3],act[pos][4] = act[pos][4],act[pos][3]
         pos += 1
     for move in act:
         pos = 0
-        sto = -1 
+        sto = -1
         position = 0
         for piece in chess:
             if piece[1:3] == move[1:3]:
@@ -88,12 +86,27 @@ def updated(text):
                   for i in chess:
                     if i[1] == chess[pos][1] and i[2] == pre_act:
                       chess[pos_rook][2] = post_act
-                    pos_rook += 1 
+                    pos_rook += 1
+                if pp != [[-1,-1],[-1,-1]] and [move[3],move[4]] == pp[0] and chess[pos][0] == 'P':
+                    pp_pos = 0
+
+                    for pp_chess in chess:
+                        if pp_chess[1:3] == pp[1]:
+                            position = pp[1]
+                        pp_pos += 1
+                    
+                if chess[pos][0] == 'P' and abs(chess[pos][1] - move[3]) == 2:
+                    pp[0] = [ int((chess[pos][1] + move[3])/2),chess[pos][2] ]
+                    pp[1] = [ move[3],move[4] ]
+                else:
+                    pp = [[-1,-1],[-1,-1]]
                 chess[pos][1] = move[3]
                 chess[pos][2] = move[4]
-                position = chess[pos][1:3]
+                if position == 0:
+                    position = chess[pos][1:3]
                 sto = chess[pos][3]
                 color_pos = chess[pos][1:3] 
+                    
                 if len(move) == 6:
                     chess[pos][0] = move[5]
                   
@@ -104,7 +117,7 @@ def updated(text):
                 if piece[1:3] == position:
                     if sto != chess[pos][3]:
                         chess.pop(pos)
-                pos +=1   
+                pos +=1  
     pos = 0
     for piece in chess: 
         if color_pos == chess[pos][1:3]:
