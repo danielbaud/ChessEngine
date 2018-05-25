@@ -346,7 +346,7 @@ Piece *ChessBoard::promotion(Piece *moved, Movement& m)
     r = ONE;
   if ((prom != 0) != (moved->type == 'P' && m.to.row == r))
     return nullptr;
-  if (prom != 'Q' && prom != 'B' && prom != 'K' && prom != 'R')
+  if (prom != 'Q' && prom != 'B' && prom != 'N' && prom != 'R')
     return nullptr;
   Piece *ret = nullptr;
   switch (prom)
