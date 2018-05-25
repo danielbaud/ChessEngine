@@ -34,12 +34,16 @@ def throw(cmd):
      output = ""
      return main(funct,sto);
    else:
-     print(CR + "Noooooo" + CW )
+     print(CR + "stop" + CW )
+     funct.stop_process()
      return quit();
 
 def main(classe,sto):
   global output,fen_2,fen_1
   while True:
+    if inside(output,"quit"):
+      print(output)
+      break 
     if len(output) != 0 or inside(sto,"WHITE"):
       sto = "" 
       print( CR + "move done: " + CP + output + CW)
@@ -56,7 +60,9 @@ def main(classe,sto):
       process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush()
       classe.set_process(process)
-    time.sleep(1)
+    time.sleep(0.1)
+  print(CR + "stop" + CW )
+  classe.stop_process() 
   return 0
      
 
@@ -65,22 +71,24 @@ class speak(threading.Thread):
   def __init__(self,cmd):
     self.cmd = cmd
     self.process = 0
+    self.runnable = 1
   def run(self):
     global output
     self.process = subprocess.Popen( self.cmd,stdin = subprocess.PIPE,  stdout=subprocess.PIPE,shell=True,stderr=subprocess.PIPE)
-    while True:
-      while True:
+    while self.runnable:
+      while self.runnable:
         try:
           text = str(self.process.stdout.readline())
           output += text[2:len(text) - 3]
         except:
           break
-      time.sleep(3)
+      time.sleep(0.5)
   def get_process(self):
     return self.process
   def set_process(self,process):
     self.process = process
-      
+  def stop_process(self):
+    self.runnable = 0
     
 def inside(text,word):
     point = 0
