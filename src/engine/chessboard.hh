@@ -41,9 +41,6 @@ public:
   int get_piece_index(const Position& p) const;
   bool is_check(Position p1, Position p2, Color color);
   bool is_check(Color color);
-  void manage_special(Movement& m);
-  int castling(Piece *moved, Movement& m);
-  void update_state();
 
   bool queenside_white;
   bool kingside_white;
@@ -56,6 +53,10 @@ private:
 
   std::vector<Piece*> pieces;
   State state;
+  void update_state();
+  int castling(Piece *moved, Movement& m);
+  void manage_special(Movement& m);
+  Piece *promotion(Piece *moved, Movement& m);
 };
 
 
