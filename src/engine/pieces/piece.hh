@@ -72,9 +72,11 @@ public:
 
   std::vector<Position> move_check(std::vector<Position> p, ChessBoard *c) const;
 
-  void move_to(const Position& p) {pos = p;}
+  virtual void move_to(const Position& p) {pos = p;}
 
   virtual std::vector<Position> get_possible_move(ChessBoard *c, bool check) const = 0;
+
+  bool is_passing(ChessBoard *c, int col, int row) const;
 
   char type;
   bool passant;

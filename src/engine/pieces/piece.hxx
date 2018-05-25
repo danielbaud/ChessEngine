@@ -33,3 +33,18 @@ const
       res.push_back(p[i]);
   return res;
 }
+
+bool Piece::is_passing(ChessBoard *c, int col, int row) const
+{
+    int destc = static_cast<int>(pos.col) + col;
+    int destr = static_cast<int>(pos.row) + row;
+    if (destc < 0 || destc > 7 || destr < 0 || destr > 7)
+      return false;
+    Position p = Position(static_cast<Col>(destc), static_cast<Row>(destr));
+    int index = c->get_piece_index(p);
+    if (index == -1)
+      return false;
+    if (c->get_pieces()[index]->passant)
+      return true;
+    return false;
+}

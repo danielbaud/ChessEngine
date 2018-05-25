@@ -57,6 +57,7 @@ private:
   int castling(Piece *moved, Movement& m);
   void manage_special(Movement& m);
   Piece *promotion(Piece *moved, Movement& m);
+  int en_passant(Piece *moved, Movement& m);
 };
 
 

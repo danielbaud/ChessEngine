@@ -90,6 +90,8 @@ bool ChessBoard::move(Movement& m)
 
   /* if taken piece, removes it, else just move */
   int t = get_piece_index(m.to);
+  if (t == -1)
+    t = en_passant(moved, m);
   Piece *taken = t == -1 ? nullptr : pieces[t];
 
   plugin::Position from = moved->get_plugin_position();
@@ -111,6 +113,7 @@ bool ChessBoard::move(Movement& m)
     ladapter.on_piece_promoted(promoted->get_plugin_piecetype(),
                                promoted->get_plugin_position());
 
+  /* if moved is king, invalidates castlings */
   if (moved->type == 'K')
   {
     if (turn == WHITE)
@@ -362,4 +365,19 @@ Piece *ChessBoard::promotion(Piece *moved, Movement& m)
 	break;
   }
   return ret;
+}
+
+int ChessBoard::en_passant(Piece *moved, Movement& m)
+{
+  if (moved->type != 'P')
+    return -1;
+  int to = -1;
+  if (turn == BLACK)
+    to = 1;
+  if (m.to.col != moved->get_position().col)
+  {
+    Row r = static_cast<Row>(static_cast<int>(m.to.row) + to);
+    return get_piece_index(Position(m.to.col, r));
+  }
+  return -1;
 }
