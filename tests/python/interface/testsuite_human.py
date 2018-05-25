@@ -51,6 +51,7 @@ def main(classe,sto):
       print( "play plz" )
       text = updated(text)
       play = gen_map(text)
+      print ( CG + "you did: " + CW + play )
       strg = play + '\n' 
       process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush()

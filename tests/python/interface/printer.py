@@ -83,7 +83,6 @@ def updated(text):
                 sto = chess[pos][3]
             pos +=1 
         pos = 0
-        print (act)
         if position:
             for piece in chess: 
                 if piece[1:3] == position:
