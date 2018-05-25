@@ -50,8 +50,6 @@ def gen_map(chess):
     z = int(play[3]) - 1
     pos = 0
     for i in chess:
-      
-      print(y,x,i[1],i[2])
       if i[0] == 'P' and y == i[1] and x == i[2] and (z == 0 or z == 7):
         play += gen_piece()
         chess[pos][0] = play[4] 
@@ -68,6 +66,7 @@ def updated(text):
     chess = primaris()
     act = decompose(text)
     pos = 0
+    color_pos = [-1,-1]
     for i in act:
         act[pos][1],act[pos][2] = act[pos][2],act[pos][1]
         act[pos][3],act[pos][4] = act[pos][4],act[pos][3]
@@ -75,7 +74,6 @@ def updated(text):
     for move in act:
         pos = 0
         sto = -1 
-        color_pos = -1
         position = 0
         for piece in chess:
             if piece[1:3] == move[1:3]:
@@ -95,7 +93,10 @@ def updated(text):
                 chess[pos][2] = move[4]
                 position = chess[pos][1:3]
                 sto = chess[pos][3]
-                color_pos = pos
+                color_pos = chess[pos][1:3] 
+                if len(move) == 6:
+                    chess[pos][0] = move[5]
+                  
             pos +=1 
         pos = 0
         if position:
@@ -103,12 +104,12 @@ def updated(text):
                 if piece[1:3] == position:
                     if sto != chess[pos][3]:
                         chess.pop(pos)
-      
                 pos +=1   
-    
-        if color_pos != -1 and move == act[-1]:
-             chess[color_pos][4] = 1
-    #print ( chess )
+    pos = 0
+    for piece in chess: 
+        if color_pos == chess[pos][1:3]:
+            chess[pos][4] = 1
+        pos += 1
     return chess
 
 def decompose(text):
@@ -118,11 +119,13 @@ def decompose(text):
     
     for i in text:
         if i == ' ':
+            if captor == 6 or captor == 5:
+                lst.append(move)
             move = []
             captor = 0
             
         if ord('A') <= ord(i) <= ord('Z'):
-            captor = 1
+            captor += 1
             move.append(i)
         if ord('a') <= ord(i) <= ord('z'):
             if captor == 0:
@@ -142,15 +145,17 @@ def decompose(text):
                 if captor == 2 or captor == 4:
                     move.append(int(i)) 
                     captor += 1
-                    if captor == 5:
+                    """if captor == 6:
                         lst.append(move)
                         move = []
-                        captor = 0
+                        captor = 0"""
                 else: 
                     move = []
                     captor = 0
         except:
-            pass  
+            pass
+    if captor == 6 or captor == 5:
+        lst.append(move) 
     y = 0
     for move in lst:
         x = 0
