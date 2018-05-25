@@ -31,12 +31,13 @@ def gen_map(chess):
     for piece in chess:
         j = piece[1]
         i = piece[2]
+        if piece[4]:
+          canvas.create_rectangle(i*ratio +rayon + 2,j*ratio+rayon + 2,i*ratio+3*rayon - 2,j*ratio+3*rayon - 2,fill="green",width = 2)
         color = piece[3]
         text = piece[0]
         canvas.create_oval(i*ratio +rayon + 5 ,j*ratio+rayon + 5,i*ratio+3*rayon - 5,j*ratio+3*rayon - 5,fill=color,width = 3,outline = "bisque2")
         x,y = (i*ratio +rayon + i*ratio+3*rayon)/2,(j*ratio+3*rayon + j*ratio+rayon)/2
         canvas.create_text(x, y,text=text, font="Stencil 30", fill="gold")      
-    
     canvas.bind("<Button-1>", reset)
 
     play = loop()
@@ -62,6 +63,7 @@ def updated(text):
     for move in act:
         pos = 0
         sto = -1 
+        color_pos = -1
         position = 0
         for piece in chess:
             if piece[1:3] == move[1:3]:
@@ -81,6 +83,7 @@ def updated(text):
                 chess[pos][2] = move[4]
                 position = chess[pos][1:3]
                 sto = chess[pos][3]
+                color_pos = pos
             pos +=1 
         pos = 0
         if position:
@@ -88,8 +91,11 @@ def updated(text):
                 if piece[1:3] == position:
                     if sto != chess[pos][3]:
                         chess.pop(pos)
-
+      
                 pos +=1   
+    
+        if color_pos != -1 and move == act[-1]:
+             chess[color_pos][4] = 1
     #print ( chess )
     return chess
 
@@ -160,12 +166,12 @@ def primaris():
             color = 'white'
         for j in range(8):
             if i == 1 or i == 6:
-                table.append(['P',i,j,color])
+                table.append(['P',i,j,color,0])
             else:
                 if i == 0:
-                    table.append([blanc[j],i,j,color])
+                    table.append([blanc[j],i,j,color,0])
                 else:
-                    table.append([noir[j],i,j,color])
+                    table.append([noir[j],i,j,color,0])
     return table
 def reset(event):
     global play
