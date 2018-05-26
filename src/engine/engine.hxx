@@ -202,6 +202,7 @@ bool Engine::start_game()
     if (cbadapter.chessboard.get_turn() == BLACK)
       pl = plugin::Color::BLACK;
     ladapter.on_player_timeout(pl);
+    ladapter.on_player_disqualified(pl);
   }
   on_ending();
   return true;
