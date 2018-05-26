@@ -42,7 +42,9 @@ def main(classe,sto):
     if inside(output,"quit"):
       print(output)
       break 
-    if len(output) != 0 or inside(sto,"WHITE"):
+    if inside(sto,"BLACK") and inside(sto,"moves") :
+      output = sto
+    if len(output) != 0 or inside(sto,"WHITE") :
       sto = "" 
       print( CR + "move done: " + CP + output + CW)
       text = updated(output)
