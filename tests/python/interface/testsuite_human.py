@@ -11,8 +11,6 @@ CG  = '\33[32m'
 CW  = '\33[37m'
 CB  = '\33[96m'
 CP = '\33[95m'
-fen_1 = 0
-fen_2 = 0
 def start():
     print ("IP or empty for local")
     text = input()
@@ -39,7 +37,7 @@ def throw(cmd):
      return quit();
 
 def main(classe,sto):
-  global output,fen_2,fen_1
+  global output
   while True:
     if inside(output,"quit"):
       print(output)
@@ -60,7 +58,7 @@ def main(classe,sto):
       process.stdin.write(strg.encode('utf-8'))
       process.stdin.flush()
       classe.set_process(process)
-    time.sleep(0.1)
+    time.sleep(0.01)
   print(CR + "stop" + CW )
   classe.stop_process() 
   return 0
@@ -82,7 +80,7 @@ class speak(threading.Thread):
           output += text[2:len(text) - 3]
         except:
           break
-      time.sleep(0.5)
+      time.sleep(0.05)
   def get_process(self):
     return self.process
   def set_process(self,process):
