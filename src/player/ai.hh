@@ -17,6 +17,12 @@ public:
 private:
 
   ChessBoard cb;
+
+  int evaluate(char p);
+
+  std::vector<int> cost(std::vector<Movement> moves);
+
+  int get_max_index(std::vector<int> v);
 };
 
 #include "ai.hxx"
