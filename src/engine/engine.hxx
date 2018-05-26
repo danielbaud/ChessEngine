@@ -282,8 +282,9 @@ bool Engine::make_move(const std::string& line, Color color)
   Position to = Position(static_cast<Col>(tc), static_cast<Row>(tr));
   if (line.size() > i)
   {
-    if (line[i] > 'A')
-      prom = line[i++];
+    if (line[i] == '=')
+      prom = line[++i];
+    ++i;
   }
   if (line.size() > i)
   {
