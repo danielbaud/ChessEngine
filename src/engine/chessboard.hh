@@ -13,7 +13,7 @@
 enum State
 {
   WHITE_CHECK, WHITE_CHECKMATE, BLACK_CHECK, BLACK_CHECKMATE,
-  DRAW, TIMEOUT, RUNNING
+  WHITE_PAT, BLACK_PAT, DRAW, RUNNING
 };
 
 class Movement
@@ -46,6 +46,8 @@ public:
   bool kingside_white;
   bool queenside_black;
   bool kingside_black;
+
+  bool draw;
   Color turn;
   plugin::ListenerAdapter ladapter;
 
@@ -58,6 +60,12 @@ private:
   void manage_special(Movement& m);
   Piece *promotion(Piece *moved, Movement& m);
   int en_passant(Piece *moved, Movement& m);
+  std::string serialize();
+
+  unsigned notake_nopawn;
+
+  std::vector<std::string> states;
+  std::vector<int> times;
 };
 
 

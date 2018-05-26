@@ -69,8 +69,8 @@ bool Engine::parse()
   ladapter.register_board(cbadapter);
   ladapter.on_game_started();
 
-  while (!is_end(temp) && (game == RUNNING || game == WHITE_CHECK
-                           || game == BLACK_CHECK))
+  while (!is_end(temp) && !cbadapter.chessboard.draw && (game == RUNNING ||
+                               game == WHITE_CHECK || game == BLACK_CHECK))
   {
     f >> temp;
     if (!make_move(temp, WHITE))
@@ -86,8 +86,8 @@ bool Engine::parse()
       return true;
     }
     f >> temp;
-    if (is_end(temp) || (game != RUNNING && game != WHITE_CHECK
-                           && game != BLACK_CHECK))
+    if (is_end(temp) || cbadapter.chessboard.draw || (game != RUNNING &&
+                            game != WHITE_CHECK && game != BLACK_CHECK))
       break;
     if (!make_move(temp, BLACK))
     {
@@ -103,15 +103,16 @@ bool Engine::parse()
     }
     f >> temp;
   }
-  if (temp == "1-0")
+  if (temp == "1-0" && game == BLACK_CHECKMATE)
     ladapter.on_player_mat(plugin::Color::BLACK);
-  if (temp == "0-1")
+  if (temp == "0-1" && game == WHITE_CHECKMATE)
     ladapter.on_player_mat(plugin::Color::WHITE);
-  if (temp == "1/2-1/2")
+  if (temp == "1/2-1/2" && (cbadapter.chessboard.draw || game == WHITE_PAT
+                            || game == BLACK_PAT))
   {
-    if (cbadapter.chessboard.get_turn() == WHITE)
+    if (game == WHITE_PAT)
       ladapter.on_player_pat(plugin::Color::WHITE);
-    if (cbadapter.chessboard.get_turn() == BLACK)
+    if (game == BLACK_PAT)
       ladapter.on_player_pat(plugin::Color::BLACK);
     ladapter.on_draw();
   }
@@ -155,7 +156,8 @@ bool Engine::start_game()
     }
     player2->send("ucinewgame");
     State game = cbadapter.chessboard.get_state();
-    while (game == WHITE_CHECK || game == BLACK_CHECK || game == RUNNING)
+    while ((game == WHITE_CHECK || game == BLACK_CHECK || game == RUNNING)
+            && !cbadapter.chessboard.draw)
     {
       player2->send(moves);
       player2->send("go");
@@ -167,7 +169,8 @@ bool Engine::start_game()
         break;
       }
       game = cbadapter.chessboard.get_state();
-      if (game != BLACK_CHECK && game != WHITE_CHECK && game != RUNNING)
+      if ((game != BLACK_CHECK && game != WHITE_CHECK && game != RUNNING)
+	   || cbadapter.chessboard.draw)
         break;
       player1->send(moves);
       player1->send("go");
@@ -184,11 +187,11 @@ bool Engine::start_game()
       ladapter.on_player_mat(plugin::Color::WHITE);
     if (game == BLACK_CHECKMATE)
       ladapter.on_player_mat(plugin::Color::BLACK);
-    if (game == DRAW)
+    if (cbadapter.chessboard.draw || game == WHITE_PAT || game == BLACK_PAT)
     {
-      if (cbadapter.chessboard.get_turn() == WHITE)
+      if (game == WHITE_PAT)
         ladapter.on_player_pat(plugin::Color::BLACK);
-      if (cbadapter.chessboard.get_turn() == BLACK)
+      if (game == BLACK_PAT)
         ladapter.on_player_pat(plugin::Color::WHITE);
       ladapter.on_draw();
     }

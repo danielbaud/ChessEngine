@@ -3,6 +3,10 @@
 ChessBoard::ChessBoard(plugin::ListenerAdapter& lis)
 : ladapter(lis)
 {
+  draw = false;
+  states = std::vector<std::string>();
+  times = std::vector<int>();
+  notake_nopawn = 0;
   pieces = std::vector<Piece*>();
   state = RUNNING;
   turn = WHITE;
@@ -138,6 +142,36 @@ bool ChessBoard::move(Movement& m, char mov, int took)
       kingside_black = false;
     }
   }
+
+  /* 50 turns w/o pawn moved or piece taken verification */
+  if (!taken && moved->type != 'P')
+    notake_nopawn++;
+  else
+    notake_nopawn = 0;
+
+  /* threefold repetition */
+  if (taken)
+  {
+    states.clear();
+    times.clear();
+  }
+
+  std::string curstate = serialize();
+  bool occured = false;
+  for (unsigned i = 0; i < states.size(); ++i)
+  {
+    if (curstate == states[i])
+    {
+      occured = true;
+      times[i]++;
+    }
+  }
+  if (!occured)
+  {
+    states.push_back(curstate);
+    times.push_back(1);
+  }
+
   update_state();
 
   turn = turn == WHITE ? BLACK : WHITE;
@@ -207,6 +241,11 @@ bool ChessBoard::is_check(Color c)
 
 void ChessBoard::update_state()
 {
+  for (unsigned i = 0; i < times.size(); ++i)
+    if (times[i] == 3)
+      draw = true;
+  if (notake_nopawn == 50)
+    draw = true;
   state = RUNNING;
   if (turn == WHITE)
   {
@@ -234,8 +273,10 @@ void ChessBoard::update_state()
       state = BLACK_CHECKMATE;
     else if (state == WHITE_CHECK)
       state = WHITE_CHECKMATE;
+    else if (turn == WHITE)
+      state = BLACK_PAT;
     else
-      state = DRAW;
+      state = WHITE_PAT;
   }
   if (state == BLACK_CHECK)
     ladapter.on_player_check(plugin::Color::BLACK);
@@ -391,4 +432,27 @@ int ChessBoard::en_passant(Piece *moved, Movement& m)
     return get_piece_index(Position(m.to.col, r));
   }
   return -1;
+}
+
+std::string ChessBoard::serialize()
+{
+  std::string ret = "";
+  for (unsigned i = 0; i < 8; ++i)
+  {
+    for (unsigned j = 0; j < 8; ++j)
+    {
+      int k=get_piece_index(Position(static_cast<Col>(i),static_cast<Row>(j)));
+      if (k == -1)
+	ret += ' ';
+      else
+      {
+	if (pieces[k]->get_color() == WHITE)
+	  ret += 'W';
+	else
+	  ret += 'B';
+	ret += pieces[k]->type;
+      }
+    }
+  }
+  return ret;
 }

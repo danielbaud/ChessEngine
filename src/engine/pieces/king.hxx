@@ -10,7 +10,8 @@ std::vector<Position> King::get_possible_move(ChessBoard *c, bool check) const
   if (can_move_to(c, 1, 0) >= 0)
   {
     p.push_back(make_pos(1, 0));
-    if (can_move_to(c, 1, 0) == 0 && can_move_to(c, 2, 0) == 0)
+    if (can_move_to(c, 1, 0) == 0 && can_move_to(c, 2, 0) == 0
+         && can_castle(c, true))
       p.push_back(make_pos(2, 0));
   }
   if (can_move_to(c, 1, -1) >= 0)
@@ -22,7 +23,8 @@ std::vector<Position> King::get_possible_move(ChessBoard *c, bool check) const
   if (can_move_to(c, -1, 0) >= 0)
   {
     p.push_back(make_pos(-1, 0));
-    if (can_move_to(c, -1, 0) == 0 && can_move_to(c, -2, 0) == 0)
+    if (can_move_to(c, -1, 0) == 0 && can_move_to(c, -2, 0) == 0
+        && can_castle(c, false))
       p.push_back(make_pos(-2, 0));
   }
   if (can_move_to(c, -1, 0) >= 0)

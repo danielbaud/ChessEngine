@@ -48,3 +48,16 @@ bool Piece::is_passing(ChessBoard *c, int col, int row) const
       return true;
     return false;
 }
+
+bool Piece::can_castle(ChessBoard *c, bool kingside) const
+{
+  if (color == WHITE)
+  {
+    if (kingside)
+      return c->kingside_white;
+    return c->queenside_white;
+  }
+  if (kingside)
+    return c->kingside_black;
+  return c->queenside_black;
+}

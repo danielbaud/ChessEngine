@@ -78,6 +78,8 @@ public:
 
   bool is_passing(ChessBoard *c, int col, int row) const;
 
+  bool can_castle(ChessBoard *c, bool kingside) const;
+
   char type;
   bool passant;
 
