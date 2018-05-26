@@ -27,8 +27,8 @@ std::vector<Position> King::get_possible_move(ChessBoard *c, bool check) const
         && can_castle(c, false))
       p.push_back(make_pos(-2, 0));
   }
-  if (can_move_to(c, -1, 0) >= 0)
-    p.push_back(make_pos(-1, 0));
+  if (can_move_to(c, -1, 1) >= 0)
+    p.push_back(make_pos(-1, 1));
   if (check)
     return move_check(p, c);
   return p;

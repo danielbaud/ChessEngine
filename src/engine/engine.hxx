@@ -190,9 +190,9 @@ bool Engine::start_game()
     if (cbadapter.chessboard.draw || game == WHITE_PAT || game == BLACK_PAT)
     {
       if (game == WHITE_PAT)
-        ladapter.on_player_pat(plugin::Color::BLACK);
-      if (game == BLACK_PAT)
         ladapter.on_player_pat(plugin::Color::WHITE);
+      if (game == BLACK_PAT)
+        ladapter.on_player_pat(plugin::Color::BLACK);
       ladapter.on_draw();
     }
   }

@@ -263,7 +263,7 @@ void ChessBoard::update_state()
     if (pieces[i] && pieces[i]->get_color() != turn)
     {
       std::vector<Position> p = pieces[i]->get_possible_move(this, true);
-      if (p.size())
+      if (p.size() > 0)
         can_move = true;
     }
   }
