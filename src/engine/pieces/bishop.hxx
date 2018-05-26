@@ -34,7 +34,7 @@ std::vector<Position> Bishop::get_possible_move(ChessBoard *c, bool check) const
     ++i;
   }
   if (can_move_to(c, -i, -i) == 1)
-    p.push_back(make_pos(i, i));
+    p.push_back(make_pos(-i, -i));
   if (check)
     return move_check(p, c);
   return p;

@@ -52,7 +52,7 @@ int ChessBoard::get_piece_index(const Position& p) const
   return -1;
 }
 
-bool ChessBoard::move(Movement& m)
+bool ChessBoard::move(Movement& m, char mov, int took)
 {
   /* manages en passant that fades and possible castlings */
   manage_special(m);
@@ -61,6 +61,9 @@ bool ChessBoard::move(Movement& m)
   int f = get_piece_index(m.from);
   Piece* moved = f == -1 ? nullptr : pieces[f];
   if (!moved || moved->get_color() != turn)
+    return false;
+
+  if (mov && mov != moved->type)
     return false;
 
   /* check if promotion is revelant */
@@ -97,6 +100,9 @@ bool ChessBoard::move(Movement& m)
     t = en_passant(moved, m);
   Piece *taken = t == -1 ? nullptr : pieces[t];
 
+  if (!taken && took == 1)
+    return false;
+
   plugin::Position from = moved->get_plugin_position();
   moved->move_to(m.to);
   plugin::Position to = moved->get_plugin_position();
@@ -104,6 +110,8 @@ bool ChessBoard::move(Movement& m)
     pieces[f] = promoted;
   if (taken)
   {
+    if (!took)
+      return false;
     pieces[t] = nullptr;
     ladapter.on_piece_moved(moved->get_plugin_piecetype(), from, to);
     ladapter.on_piece_taken(taken->get_plugin_piecetype(),
@@ -139,12 +147,12 @@ bool ChessBoard::move(Movement& m)
 bool ChessBoard::is_check(Position p1, Position p2, Color c)
 {
   int from = get_piece_index(p1);
-  Piece *moved = pieces[from];
   if (from == -1)
     return false;
+  Piece *moved = pieces[from];
   int to = get_piece_index(p2);
   Piece *removed = nullptr;
-  if (to > 0)
+  if (to > -1)
     removed = pieces[to];
   Piece *king = nullptr;
   for (unsigned i = 0; !king; ++i)

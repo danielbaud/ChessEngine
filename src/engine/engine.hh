@@ -5,6 +5,7 @@
 #include "../network-api/server-network-api.hh"
 #include "../network-api/common.hh"
 #include <string>
+#include <fstream>
 
 
 class Player
@@ -32,7 +33,7 @@ public:
   Engine(unsigned short port, plugin::ListenerAdapter& lis);
   Engine(std::string pgn, plugin::ListenerAdapter& lis);
 
-  bool move(Movement m);
+  bool move(Movement m, char mov, int took);
   bool parse();
   bool start_game();
   void on_ending();
@@ -45,8 +46,11 @@ private:
   std::string pgn_path;
   plugin::ChessboardAdapter cbadapter;
   plugin::ListenerAdapter ladapter;
+  bool is_end(std::string token);
 
   Movement get_move(const std::string& line);
+  bool make_move(const std::string& line, Color color);
+  void disqualify(plugin::Color color);
 };
 
 #include "engine.hxx"

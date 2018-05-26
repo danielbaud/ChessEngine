@@ -33,7 +33,7 @@ public:
 
   ChessBoard(plugin::ListenerAdapter& lis);
 
-  bool move(Movement& m);
+  bool move(Movement& m, char mov, int took);
   State get_state() const {return state;}
   Color get_turn() const {return turn;}
   std::vector<Piece*> get_pieces() const {return pieces;}
