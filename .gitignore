@@ -4,3 +4,4 @@ uml
 *.swp
 *.swo
 clean
+__pycache__
