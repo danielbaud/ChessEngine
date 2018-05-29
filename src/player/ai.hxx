@@ -83,7 +83,6 @@ std::string AI::do_move()
   if (dest[m].promotion)
     move += dest[m].promotion;
 
-  std::cout << "I did " << move << std::endl;
   return move;
 }
 
@@ -98,7 +97,6 @@ std::string AI::receive_move(const std::string& log)
 
   if (ret[0] == ' ')
     ret = ret.substr(1, ret.size());
-  std::cout << "Opponent did " << ret << std::endl;
 
   Position from = Position(static_cast<Col>(ret[0] - 'a'),
                            static_cast<Row>(ret[1] - '1'));
