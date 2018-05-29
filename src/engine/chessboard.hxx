@@ -178,6 +178,36 @@ bool ChessBoard::move(Movement& m, char mov, int took)
   return true;
 }
 
+Piece *ChessBoard::force_move(const Position& p1, const Position& p2)
+{
+  int p = get_piece_index(p1);
+  if (p == -1)
+    return nullptr;
+  int t = get_piece_index(p2);
+  pieces[p]->move_to(p2);
+  if (t == -1)
+    return nullptr;
+  Piece *taken = pieces[t];
+  pieces[t] = nullptr;
+  return taken;
+}
+
+void ChessBoard::undoforced(const Position& p1, const Position& p2, Piece *t)
+{
+  int p = get_piece_index(p2);
+  if (p == -1)
+    return;
+  pieces[p]->move_to(p1);
+  if (t)
+  {
+    unsigned i = 0;
+    for (; i < 32 && pieces[i]; ++i);
+    if (i == 32)
+      return;
+    pieces[i] = t;
+  }
+}
+
 bool ChessBoard::is_check(Position p1, Position p2, Color c)
 {
   int from = get_piece_index(p1);
