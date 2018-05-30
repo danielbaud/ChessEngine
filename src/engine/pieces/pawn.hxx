@@ -33,5 +33,7 @@ void Pawn::move_to(const Position& p)
   }
   if (pos.row == fr && p.row == tr)
     passant = true;
+  else
+    passant = false;
   pos = p;
 }

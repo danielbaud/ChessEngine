@@ -44,8 +44,11 @@ bool Piece::is_passing(ChessBoard *c, int col, int row) const
     int index = c->get_piece_index(p);
     if (index == -1)
       return false;
+    /*
     Piece *pie = c->get_pieces()[index];
     return pie->passant && pie->type == 'P';
+    */
+    return false;
 }
 
 bool Piece::can_castle(ChessBoard *c, bool kingside) const
