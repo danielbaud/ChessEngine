@@ -24,14 +24,14 @@ $ ./chessengine -h
 ### human
 
 ```bash
-$ ./human _ip_ _port_
+$ ./human ip port
 ```
 Launches a human client on an engine at _ip_ on the port _port_
 
 ### ai
 
 ```bash
-$ ./ai _ip_ _port_
+$ ./ai ip port
 ```
 Launches an AI client on an engine at _ip_ on the port _port_
 
